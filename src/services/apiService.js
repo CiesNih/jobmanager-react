@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:7122/api';
+const API_URL = 'https://localhost:7122/api';
 
 export const apiCall = async (endpoint, method = 'GET', body = null) => {
   const options = {
