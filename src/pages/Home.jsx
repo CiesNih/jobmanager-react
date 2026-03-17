@@ -1,179 +1,282 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import { getAllCandidates } from '../services/candidateService';
-import './Home.css';
+import '../styles/Home.css';
 
 export default function Home() {
   const navigate = useNavigate();
-  const [stats, setStats] = useState({
-    candidates: 0,
-    jobs: 0,
-  });
+  const [keyword, setKeyword] = useState('');
+  const [location, setLocation] = useState('');
+  const [candidates, setCandidates] = useState([]);
+  const [filteredCandidates, setFilteredCandidates] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [favorites, setFavorites] = useState([]);
+
+  const itemsPerPage = 6;
 
   useEffect(() => {
-    getAllCandidates()
-      .then(res => {
-        setStats(prev => ({
-          ...prev,
-          candidates: res.data.length
-        }));
-      })
-      .catch(err => console.error('Error:', err));
+    fetchCandidates();
   }, []);
 
+  useEffect(() => {
+    filterCandidates();
+  }, [keyword, location, candidates]);
+
+  const fetchCandidates = async () => {
+    try {
+      const res = await getAllCandidates();
+      setCandidates(res.data);
+    } catch (err) {
+      console.error('Error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filterCandidates = () => {
+    let filtered = candidates;
+
+    if (keyword) {
+      filtered = filtered.filter(c =>
+        c.tieuDeHoSo?.toLowerCase().includes(keyword.toLowerCase())
+      );
+    }
+
+    if (location) {
+      filtered = filtered.filter(c =>
+        c.diaChi?.toLowerCase().includes(location.toLowerCase())
+      );
+    }
+
+    setFilteredCandidates(filtered);
+    setCurrentPage(1);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    filterCandidates();
+  };
+
+  const toggleFavorite = (id) => {
+    setFavorites(prev =>
+      prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
+    );
+  };
+
+  const paginatedCandidates = filteredCandidates.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(filteredCandidates.length / itemsPerPage);
+
   return (
-    <div className="home">
+    <div className="home-container">
       {/* Hero Section */}
-      <section className="hero">
+      <section className="hero-section">
         <div className="hero-content">
-          <h1 className="hero-title">Quản Lý Việc Làm & Ứng Viên</h1>
-          <p className="hero-subtitle">
-            Nền tảng toàn diện giúp bạn quản lý hồ sơ, đơn ứng tuyển và theo dõi cơ hội việc làm một cách hiệu quả
-          </p>
-          
-          <div className="hero-buttons">
-            <button 
-              className="btn-primary"
-              onClick={() => navigate('/candidates')}
-            >
-              Xem Danh Sách Ứng Viên →
-            </button>
-            <button className="btn-secondary">
-              Tìm Hiểu Thêm
-            </button>
-          </div>
+          <h1>Tìm Việc Làm & Ứng Viên Phù Hợp</h1>
+          <p>Nền tảng kết nối tuyển dụng hàng đầu</p>
 
-          <div className="hero-image">
-            <div className="illustration">
-              <div className="illustration-card">
-                <span className="card-icon">👤</span>
-                <p>Ứng Viên</p>
-                <p className="card-count">{stats.candidates}</p>
+          {/* Search Bar */}
+          <form className="search-form" onSubmit={handleSearch}>
+            <div className="search-inputs">
+              <div className="search-group">
+                <label>Từ khóa:</label>
+                <input
+                  type="text"
+                  placeholder="Vị trí công việc, Quản Lý..."
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
+                />
               </div>
-              <div className="illustration-card">
-                <span className="card-icon">💼</span>
-                <p>Việc Làm</p>
-                <p className="card-count">∞</p>
+              <div className="search-group">
+                <label>Địa điểm:</label>
+                <input
+                  type="text"
+                  placeholder="Tính/Thành phố, Quận/Huyện..."
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
               </div>
-              <div className="illustration-card">
-                <span className="card-icon">✉️</span>
-                <p>Đơn Ứng Tuyển</p>
-                <p className="card-count">Unlimited</p>
-              </div>
+              <button type="submit" className="btn-search">
+                🔍 TÌM VIỆC
+              </button>
             </div>
-          </div>
+
+            {/* Filters */}
+            <div className="filters">
+              <button type="button" className="filter-btn">
+                <span>🏢</span> Ngành nghề
+              </button>
+              <button type="button" className="filter-btn">
+                <span>📋</span> Loại hình
+              </button>
+              <button type="button" className="filter-btn">
+                <span>💰</span> Mức lương
+              </button>
+              <button type="button" className="filter-btn">
+                <span>👤</span> Chức vụ
+              </button>
+              <button type="button" className="filter-btn">
+                <span>⭐</span> Kinh nghiệm
+              </button>
+              <button type="button" className="filter-btn">
+                <span>🎓</span> Học vấn
+              </button>
+            </div>
+          </form>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="features" id="features">
-        <div className="features-container">
-          <h2>Các Tính Năng Chính</h2>
-          <p className="section-subtitle">Tất cả những gì bạn cần để quản lý việc làm</p>
-
-          <div className="features-grid">
-            <div className="feature-card">
-              <div className="feature-icon">👥</div>
-              <h3>Quản Lý Ứng Viên</h3>
-              <p>Lưu trữ, tìm kiếm và quản lý thông tin ứng viên một cách tập trung và dễ dàng</p>
-            </div>
-
-            <div className="feature-card">
-              <div className="feature-icon">📄</div>
-              <h3>Hệ Thống Hồ Sơ</h3>
-              <p>Tổ chức hồ sơ chi tiết, theo dõi kinh nghiệm và kỹ năng của từng ứng viên</p>
-            </div>
-
-            <div className="feature-card">
-              <div className="feature-icon">✉️</div>
-              <h3>Quản Lý Đơn Ứng Tuyển</h3>
-              <p>Theo dõi tất cả đơn ứng tuyển và cập nhật tình trạng từng đơn</p>
-            </div>
-
-            <div className="feature-card">
-              <div className="feature-icon">🔍</div>
-              <h3>Tìm Kiếm Nâng Cao</h3>
-              <p>Tìm ứng viên nhanh chóng theo nhiều tiêu chí khác nhau</p>
-            </div>
-
-            <div className="feature-card">
-              <div className="feature-icon">📊</div>
-              <h3>Phân Tích Dữ Liệu</h3>
-              <p>Xem thống kê chi tiết về các đơn ứng tuyển và tỷ lệ thành công</p>
-            </div>
-
-            <div className="feature-card">
-              <div className="feature-icon">🔐</div>
-              <h3>Bảo Mật Cao</h3>
-              <p>Bảo vệ thông tin ứng viên với các tiêu chuẩn bảo mật quốc tế</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Statistics Section */}
-      <section className="statistics" id="stats">
-        <div className="stats-container">
-          <h2>Thống Kê Hệ Thống</h2>
-          <p className="section-subtitle">Dữ liệu thực tế từ nền tảng của chúng tôi</p>
-
-          <div className="stats-grid">
-            <div className="stat-item">
-              <h3>{stats.candidates}</h3>
-              <p>Ứng Viên Đã Đăng Ký</p>
-              <div className="stat-bar">
-                <div className="stat-fill" style={{width: '75%'}}></div>
+      {/* Results Section */}
+      <section className="results-section">
+        <div className="results-container">
+          {/* Main Content */}
+          <div className="main-content">
+            {/* Results Header */}
+            <div className="results-header">
+              <h2>
+                Danh sách ứng viên{' '}
+                <span className="highlight">{filteredCandidates.length}</span> kết quả
+              </h2>
+              <div className="pagination-info">
+                {filteredCandidates.length > 0 ? (
+                  <span>
+                    Ứng viên {(currentPage - 1) * itemsPerPage + 1} -{' '}
+                    {Math.min(currentPage * itemsPerPage, filteredCandidates.length)} /
+                    {filteredCandidates.length}
+                  </span>
+                ) : (
+                  <span>Không có kết quả</span>
+                )}
               </div>
             </div>
 
-            <div className="stat-item">
-              <h3>500+</h3>
-              <p>Công Ty Đối Tác</p>
-              <div className="stat-bar">
-                <div className="stat-fill" style={{width: '85%'}}></div>
+            {/* Loading */}
+            {loading && (
+              <div className="loading-state">
+                <div className="spinner"></div>
+                <p>Đang tải dữ liệu...</p>
               </div>
+            )}
+
+            {/* Empty State */}
+            {!loading && filteredCandidates.length === 0 && (
+              <div className="empty-state">
+                <p>😕 Không tìm thấy ứng viên phù hợp</p>
+              </div>
+            )}
+
+            {/* Job Cards Grid */}
+            {!loading && paginatedCandidates.length > 0 && (
+              <div className="jobs-grid">
+                {paginatedCandidates.map(candidate => (
+                  <div key={candidate.maUngVien} className="job-card">
+                    {/* Card Header */}
+                    <div className="card-header">
+                      <div className="company-logo">
+                        <span>{candidate.tieuDeHoSo?.charAt(0).toUpperCase()}</span>
+                      </div>
+                      <div className="card-header-content">
+                        <h3 className="job-title">{candidate.tieuDeHoSo}</h3>
+                        <p className="company-name">Ứng Viên</p>
+                      </div>
+                      <button
+                        className={`btn-favorite ${
+                          favorites.includes(candidate.maUngVien) ? 'active' : ''
+                        }`}
+                        onClick={() => toggleFavorite(candidate.maUngVien)}
+                      >
+                        ♡
+                      </button>
+                    </div>
+
+                    {/* Card Body */}
+                    <div className="card-body">
+                      <p className="location">
+                        📍 <strong>{candidate.diaChi || 'Chưa cập nhật'}</strong>
+                      </p>
+                      <p className="salary">
+                        💰 <strong>{candidate.soNamKinhNghiem || 0} năm kinh nghiệm</strong>
+                      </p>
+                    </div>
+
+                    {/* Card Footer */}
+                    <div className="card-footer">
+                      <div className="job-tags">
+                        <span className="tag">Full-time</span>
+                        <span className="tag">
+                          {candidate.soNamKinhNghiem || 0}+ năm
+                        </span>
+                        <span className="tag">13 phút trước</span>
+                      </div>
+                    </div>
+
+                    {/* Card Action */}
+                    <button
+                      className="btn-apply"
+                      onClick={() => navigate(`/candidates`)}
+                    >
+                      Xem Chi Tiết
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Pagination */}
+            {!loading && filteredCandidates.length > 0 && (
+              <div className="pagination">
+                <button
+                  className="page-btn"
+                  onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                >
+                  ← Trang trước
+                </button>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                  <button
+                    key={page}
+                    className={`page-btn ${currentPage === page ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </button>
+                ))}
+
+                <button
+                  className="page-btn"
+                  onClick={() =>
+                    setCurrentPage(prev => Math.min(totalPages, prev + 1))
+                  }
+                  disabled={currentPage === totalPages}
+                >
+                  Trang sau →
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Sidebar */}
+          <aside className="sidebar">
+            <div className="sidebar-card">
+              <h3>📢 Thông Báo Tuyển Dụng</h3>
+              <p>Hãy đăng ký để nhận thông báo về các việc làm mới phù hợp với bạn</p>
+              <button className="btn-register">Đăng Ký Ngay</button>
             </div>
 
-            <div className="stat-item">
-              <h3>10K+</h3>
-              <p>Việc Làm Có Sẵn</p>
-              <div className="stat-bar">
-                <div className="stat-fill" style={{width: '90%'}}></div>
-              </div>
+            <div className="sidebar-card">
+              <h3>💡 Mẹo Tuyển Dụng</h3>
+              <ul>
+                <li>✓ Cập nhật CV thường xuyên</li>
+                <li>✓ Điền đầy đủ thông tin</li>
+                <li>✓ Kiểm tra email thường xuyên</li>
+              </ul>
             </div>
-
-            <div className="stat-item">
-              <h3>95%</h3>
-              <p>Tỷ Lệ Thành Công</p>
-              <div className="stat-bar">
-                <div className="stat-fill" style={{width: '95%'}}></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="cta">
-        <div className="cta-content">
-          <h2>Bắt Đầu Quản Lý Ngay Hôm Nay</h2>
-          <p>Đơn giản, hiệu quả và nhanh chóng</p>
-          
-          <div className="cta-buttons">
-            <button 
-              className="btn-primary"
-              onClick={() => navigate('/candidates')}
-            >
-              Truy Cập Hệ Thống
-            </button>
-            <button className="btn-secondary">Xem Demo</button>
-          </div>
-
-          <div className="cta-features">
-            <span>✓ Không cần cài đặt</span>
-            <span>✓ Sử dụng ngay lập tức</span>
-            <span>✓ Hỗ trợ 24/7</span>
-          </div>
+          </aside>
         </div>
       </section>
     </div>
