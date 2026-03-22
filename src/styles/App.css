@@ -6,70 +6,36 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #fff;
+  background-color: #f5f5f5;
   color: #333;
-}
-
-html, body, #root {
-  height: 100%;
 }
 
 #root {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
-main {
+.app-container {
+  display: flex;
   flex: 1;
+  gap: 0;
 }
 
-footer {
-  background: #f9f9f9;
-  border-top: 1px solid #eee;
+.main-content {
+  flex: 1;
   padding: 20px;
-  text-align: center;
-  color: #999;
-  font-size: 14px;
+  background-color: #fff;
+  overflow-y: auto;
 }
 
-/* Global Styles */
-button {
-  font-family: inherit;
-}
+/* Responsive */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
 
-input, textarea, select {
-  font-family: inherit;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
-}
-
-a {
-  color: #667eea;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-a:hover {
-  color: #764ba2;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  .main-content {
+    padding: 15px;
+  }
 }
