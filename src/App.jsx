@@ -5,15 +5,15 @@ import TestAPI from './pages/TestAPI';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
-import './App.css';
+import './styles/App.css';
 
 function App() {
   return (
     <Router>
       <Header />
-      <div style={{ display: 'flex' }}>
+      <div className="app-container">
         <Sidebar />
-        <main style={{ flex: 1, padding: '20px' }}>
+        <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/candidates" element={<CandidateListPage />} />
