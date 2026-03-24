@@ -1,0 +1,203 @@
+/* Tổng thể trang chi tiết */
+.job-detail-layout {
+  max-width: 1200px;
+  margin: 20px auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Chia 2 cột: Chính 66%, Sidebar 33% */
+  gap: 20px;
+  padding: 0 15px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Các khối trắng (Card) */
+.detail-card, .sidebar-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Nút quay lại */
+.btn-back-detail {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.btn-back-detail:hover {
+  color: #2d56a1;
+}
+
+/* Tiêu đề công việc */
+.detail-title {
+  font-size: 24px;
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 25px;
+  line-height: 1.4;
+}
+
+/* Grid thông tin nhanh (Lương, Địa điểm, Exp) */
+.quick-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.info-icon {
+  background: #f0f7ff;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 18px;
+}
+
+.info-label {
+  display: block;
+  font-size: 13px;
+  color: #888;
+}
+
+.info-value {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.text-blue { color: #2d56a1; }
+
+.deadline-text {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+/* Nhóm nút hành động */
+.action-buttons-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-apply-large {
+  flex: 1;
+  background: #2d56a1; /* Màu xanh đậm chuyên nghiệp */
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-apply-large:hover { background: #1e3a6d; }
+
+.btn-chat-detail {
+  padding: 14px 20px;
+  border: 1px solid #2d56a1;
+  color: #2d56a1;
+  background: white;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-icon-detail {
+  width: 48px;
+  height: 48px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Phần nội dung chi tiết */
+.section-title-detail {
+  font-size: 20px;
+  border-left: 5px solid #2d56a1;
+  padding-left: 15px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.content-card h3 {
+  font-size: 17px;
+  margin: 20px 0 10px 0;
+  color: #444;
+}
+
+.job-description-text {
+  line-height: 1.8;
+  color: #555;
+  white-space: pre-line; /* Quan trọng: Giữ xuống dòng từ dữ liệu SQL */
+}
+
+/* Sidebar bên phải */
+.company-card-detail {
+  text-align: center;
+}
+
+.company-logo-large {
+  width: 80px;
+  height: 80px;
+  background: #f5f5f5;
+  border: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 15px;
+  border-radius: 12px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #2d56a1;
+}
+
+.industry-text {
+  font-size: 14px;
+  color: #777;
+  margin-top: 10px;
+}
+
+.tag-detail {
+  color: #333;
+  font-weight: 600;
+}
+
+.general-info-card h3 {
+  font-size: 16px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.info-list p {
+  margin-bottom: 12px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Responsive cho Mobile */
+@media (max-width: 992px) {
+  .job-detail-layout {
+    grid-template-columns: 1fr;
+  }
+}
