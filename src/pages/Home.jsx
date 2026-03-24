@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllCandidates } from '../services/candidateService';
+import { getAllJobs } from '../services/jobService';
 import '../styles/Home.css';
 
 export default function Home() {
   const navigate = useNavigate();
   const [keyword, setKeyword] = useState('');
   const [location, setLocation] = useState('');
-  const [candidates, setCandidates] = useState([]);
-  const [filteredCandidates, setFilteredCandidates] = useState([]);
+  const [jobs, setJobs] = useState([]);
+  const [filteredJobs, setFilteredJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [favorites, setFavorites] = useState([]);
@@ -16,17 +16,17 @@ export default function Home() {
   const itemsPerPage = 6;
 
   useEffect(() => {
-    fetchCandidates();
+    fetchJobs();
   }, []);
 
   useEffect(() => {
-    filterCandidates();
-  }, [keyword, location, candidates]);
+    filterJobs();
+  }, [keyword, location, jobs]);
 
-  const fetchCandidates = async () => {
+  const fetchJobs = async () => {
     try {
-      const res = await getAllCandidates();
-      setCandidates(res.data);
+      const res = await getAllJobs();
+      setJobs(res.data);
     } catch (err) {
       console.error('Error:', err);
     } finally {
@@ -34,28 +34,29 @@ export default function Home() {
     }
   };
 
-  const filterCandidates = () => {
-    let filtered = candidates;
+  const filterJobs = () => {
+    let filtered = jobs;
 
     if (keyword) {
-      filtered = filtered.filter(c =>
-        c.tieuDeHoSo?.toLowerCase().includes(keyword.toLowerCase())
+      filtered = filtered.filter(job =>
+        job.tieuDe?.toLowerCase().includes(keyword.toLowerCase()) ||
+        job.tenCongTy?.toLowerCase().includes(keyword.toLowerCase())
       );
     }
 
     if (location) {
-      filtered = filtered.filter(c =>
-        c.diaChi?.toLowerCase().includes(location.toLowerCase())
+      filtered = filtered.filter(job =>
+        job.diaDiem?.toLowerCase().includes(location.toLowerCase())
       );
     }
 
-    setFilteredCandidates(filtered);
+    setFilteredJobs(filtered);
     setCurrentPage(1);
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    filterCandidates();
+    filterJobs();
   };
 
   const toggleFavorite = (id) => {
@@ -64,19 +65,19 @@ export default function Home() {
     );
   };
 
-  const paginatedCandidates = filteredCandidates.slice(
+  const paginatedJobs = filteredJobs.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  const totalPages = Math.ceil(filteredCandidates.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredJobs.length / itemsPerPage);
 
   return (
     <div className="home-container">
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
-          <h1>Tìm Việc Làm & Ứng Viên Phù Hợp</h1>
+          <h1>Tìm Việc Làm Phù Hợp</h1>
           <p>Nền tảng kết nối tuyển dụng hàng đầu</p>
 
           {/* Search Bar */}
@@ -86,7 +87,7 @@ export default function Home() {
                 <label>Từ khóa:</label>
                 <input
                   type="text"
-                  placeholder="Vị trí công việc, Quản Lý..."
+                  placeholder="Vị trí công việc, công ty..."
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                 />
@@ -138,15 +139,15 @@ export default function Home() {
             {/* Results Header */}
             <div className="results-header">
               <h2>
-                Danh sách ứng viên{' '}
-                <span className="highlight">{filteredCandidates.length}</span> kết quả
+                Danh sách việc làm{' '}
+                <span className="highlight">{filteredJobs.length}</span> kết quả
               </h2>
               <div className="pagination-info">
-                {filteredCandidates.length > 0 ? (
+                {filteredJobs.length > 0 ? (
                   <span>
-                    Ứng viên {(currentPage - 1) * itemsPerPage + 1} -{' '}
-                    {Math.min(currentPage * itemsPerPage, filteredCandidates.length)} /
-                    {filteredCandidates.length}
+                    Việc làm {(currentPage - 1) * itemsPerPage + 1} -{' '}
+                    {Math.min(currentPage * itemsPerPage, filteredJobs.length)} /
+                    {filteredJobs.length}
                   </span>
                 ) : (
                   <span>Không có kết quả</span>
@@ -163,71 +164,64 @@ export default function Home() {
             )}
 
             {/* Empty State */}
-            {!loading && filteredCandidates.length === 0 && (
+            {!loading && filteredJobs.length === 0 && (
               <div className="empty-state">
-                <p>😕 Không tìm thấy ứng viên phù hợp</p>
+                <p>😕 Không tìm thấy việc làm phù hợp</p>
               </div>
             )}
 
             {/* Job Cards Grid */}
-            {!loading && paginatedCandidates.length > 0 && (
+            {!loading && paginatedJobs.length > 0 && (
               <div className="jobs-grid">
-                {paginatedCandidates.map(candidate => (
-                  <div key={candidate.maUngVien} className="job-card">
-                    {/* Card Header */}
+                {paginatedJobs.map(job => (
+                  <div key={job.maViecLam} className="job-card">
                     <div className="card-header">
                       <div className="company-logo">
-                        <span>{candidate.tieuDeHoSo?.charAt(0).toUpperCase()}</span>
+                        <span>{job.tieuDe?.charAt(0).toUpperCase()}</span>
                       </div>
                       <div className="card-header-content">
-                        <h3 className="job-title">{candidate.tieuDeHoSo}</h3>
-                        <p className="company-name">Ứng Viên</p>
+                        <h3 className="job-title" style={{ color: '#d32f2f' }}>{job.tieuDe}</h3>
+                        <p className="company-name">{job.tenCongTy}</p>
                       </div>
                       <button
-                        className={`btn-favorite ${
-                          favorites.includes(candidate.maUngVien) ? 'active' : ''
-                        }`}
-                        onClick={() => toggleFavorite(candidate.maUngVien)}
-                      >
-                        ♡
+                       className={`btn-favorite ${favorites.includes(job.maViecLam) ? 'active' : ''}`}
+                       onClick={() => toggleFavorite(job.maViecLam)}
+                     >
+                      ♡
                       </button>
-                    </div>
-
-                    {/* Card Body */}
-                    <div className="card-body">
+                      </div>
+                      {/* Card Body */}
+                      <div className="card-body">
                       <p className="location">
-                        📍 <strong>{candidate.diaChi || 'Chưa cập nhật'}</strong>
+                      📍 <strong>{job.diaDiem || 'Bình Dương'}</strong>
                       </p>
                       <p className="salary">
-                        💰 <strong>{candidate.soNamKinhNghiem || 0} năm kinh nghiệm</strong>
+                       💰<strong>
+                      {job.luongToiThieu?.toLocaleString()} - {job.luongToiDa?.toLocaleString()} VNĐ
+                      </strong>
                       </p>
-                    </div>
-
-                    {/* Card Footer */}
-                    <div className="card-footer">
-                      <div className="job-tags">
-                        <span className="tag">Full-time</span>
-                        <span className="tag">
-                          {candidate.soNamKinhNghiem || 0}+ năm
-                        </span>
-                        <span className="tag">13 phút trước</span>
-                      </div>
-                    </div>
-
-                    {/* Card Action */}
-                    <button
-                      className="btn-apply"
-                      onClick={() => navigate(`/candidates`)}
-                    >
-                      Xem Chi Tiết
-                    </button>
                   </div>
-                ))}
-              </div>
-            )}
+                  {/* Card Footer */}
+                  <div className="card-footer">
+                   <div className="job-tags">
+                    <span className="tag">{job.loaiHinhCongViec || 'Full-time'}</span>
+                    <span className="tag">Mới đăng</span>
+                    <span className="tag">13 phút trước</span>
+                    </div>
+                  </div>
 
+                  {/* Card Action */}
+                  <button
+                  className="btn-apply"
+                  onClick={() => navigate(`/jobs/${job.maViecLam}`)}
+                  >
+                  Xem Chi Tiết
+                </button>
+              </div>
+            ))}
+              </div>)}
             {/* Pagination */}
-            {!loading && filteredCandidates.length > 0 && (
+            {!loading && filteredJobs.length > 0 && (
               <div className="pagination">
                 <button
                   className="page-btn"
