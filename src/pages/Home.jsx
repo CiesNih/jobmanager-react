@@ -219,15 +219,15 @@ export default function Home() {
                 </button>
               </div>
             ))}
-              </div>)}
-            {/* Pagination */}
+              </div>
+              )}{/* Pagination Controls */}
             {!loading && filteredJobs.length > 0 && (
               <div className="pagination">
                 <button
                   className="page-btn"
                   onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                   disabled={currentPage === 1}
-                >
+                > 
                   ← Trang trước
                 </button>
 
