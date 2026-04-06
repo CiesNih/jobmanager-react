@@ -4,7 +4,7 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-section">
-        <h3> Phản hồi</h3>
+        <h3> Tìm kiếm nhanh</h3>
         <ul>
           <li> Công việc hot</li>
           <li> Bàn luận</li>

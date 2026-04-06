@@ -2,18 +2,15 @@ import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import '../styles/Header.css';
 
-export default function Header() {
-  // Trạng thái để điều khiển hiển thị menu
+export default function Header({ onOpenAuth }) {
   const [showJobMenu, setShowJobMenu] = useState(false);
   const [showCompanyMenu, setShowCompanyMenu] = useState(false);
 
-  // Dữ liệu cho menu việc làm
   const jobCategories = {
     nganhNghe: ["Tài Chính/Ngân Hàng", "Kế Toán/Kiểm Toán", "Hành Chính/Văn Phòng", "Kinh Doanh/Bán Hàng", "Marketing/Quảng Cáo", "Xây dựng/Kiến Trúc", "Công Nghệ Thông Tin", "Nhân Sự"],
     diaDiem: ["Hồ Chí Minh", "Hà Nội", "Đà Nẵng", "Cần Thơ", "Bình Dương", "Hải Phòng", "Đồng Nai", "Quảng Ninh"],
     nhuCau: ["Tuyển Gấp", "Nổi Bật", "Lao động phổ thông", "Không cần bằng cấp", "Online tại nhà", "Part-time", "Thời vụ", "Remote"]
   };
-//2. Dữ liệu công ty
   const companyCategories = [
     "Ngân hàng", "Bảo hiểm", "Phần mềm", "Xây dựng", 
     "Bất động sản", "Thương mại điện tử", "Sản xuất", "Dịch vụ"
@@ -22,7 +19,6 @@ export default function Header() {
   return (
     <header className="header">
       <div className="header-container">
-        {/* Logo */}
         <div className="logo-section">
           <Link to="/" className="logo-link">
             <span className="logo-icon">💼</span>
@@ -30,17 +26,13 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Navigation Menu */}
         <nav className="nav-menu">
-          {}
           <div 
             className="nav-item"
             onMouseEnter={() => setShowJobMenu(true)} 
             onMouseLeave={() => setShowJobMenu(false)} 
           >
             <Link to="/jobs" className="nav-link">Việc làm <span>▼</span></Link>
-            
-            {}
             {showJobMenu && (
               <div className="mega-menu">
                 <div className="mega-menu-container">
@@ -84,6 +76,7 @@ export default function Header() {
               </div>
             )}
           </div>
+
           <div className="nav-item">
             <Link to="/candidates" className="nav-link">CV/Hồ sơ <span>▼</span></Link>
           </div>
@@ -91,14 +84,22 @@ export default function Header() {
             <Link to="/tools" className="nav-link">Công cụ <span>▼</span></Link>
           </div>
           <div className="nav-item">
-            <Link to="/blog" className="nav-link">Cẩm nang nghề nghiệp</Link>
+            <Link to="/blog" className="nav-link">Thông báo thống kê</Link>
           </div>
         </nav>
 
-        {/* Nút hành động */}
         <div className="header-auth">
-          <Link to="/register" className="btn-register">Đăng ký</Link>
-          <Link to="/login" className="btn-login">Đăng nhập</Link>
+          {onOpenAuth ? (
+            <>
+              <button className="btn-register" onClick={() => onOpenAuth('register')}>Đăng ký</button>
+              <button className="btn-login" onClick={() => onOpenAuth('login')}>Đăng nhập</button>
+            </>
+          ) : (
+            <>
+              <Link to="/register" className="btn-register">Đăng ký</Link>
+              <Link to="/login" className="btn-login">Đăng nhập</Link>
+            </>
+          )}
           <Link to="/employer" className="btn-employer">NHÀ TUYỂN DỤNG</Link>
         </div>
       </div>

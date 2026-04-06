@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllJobs } from '../services/jobService';
+import Sidebar from '../components/Sidebar';
 import '../styles/Home.css';
 
 export default function Home() {
@@ -270,6 +271,7 @@ export default function Home() {
                 <li>✓ Kiểm tra email thường xuyên</li>
               </ul>
             </div>
+            <Sidebar />
           </aside>
         </div>
       </section>

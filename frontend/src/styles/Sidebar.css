@@ -1,27 +1,34 @@
+/* Sidebar layout & container */
 .sidebar {
-  min-height: 400px;
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 12px;
+  width: 280px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+  padding-left: 0;
 }
 
+/* Section card inside sidebar */
 .sidebar-section {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 16px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
+/* Section heading */
 .sidebar-section h3 {
-  margin: 0 0 15px 0;
+  margin: 0 0 10px 0;
   font-size: 16px;
-  font-weight: 600;
   color: #333;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
+/* List inside a section */
 .sidebar-section ul {
   list-style: none;
   padding: 0;
@@ -30,27 +37,63 @@
 
 .sidebar-section li {
   padding: 10px 0;
+  border-bottom: 1px solid #f4f4f4;
   font-size: 14px;
   color: #666;
+  transition: all 0.18s ease;
   cursor: pointer;
-  transition: all 0.3s;
-  border-left: 3px solid transparent;
-  padding-left: 10px;
 }
 
+.sidebar-section li:last-child {
+  border-bottom: none;
+}
+
+/* Hover state for nicer affordance */
 .sidebar-section li:hover {
-  color: #667eea;
-  border-left-color: #667eea;
-  background: #f9f9f9;
+  color: #764ba2;
+  padding-left: 8px;
+  font-weight: 600;
+  background: linear-gradient(90deg, rgba(118,75,162,0.04), rgba(118,75,162,0));
+  border-radius: 6px;
 }
 
+/* Small helper text / badges */
+.sidebar-section .muted {
+  color: #999;
+  font-size: 13px;
+}
+
+/* Call-to-action button style if used inside sidebar */
+.sidebar .btn-register,
+.sidebar .btn-cta {
+  display: inline-block;
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sidebar .btn-register:hover,
+.sidebar .btn-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(102,126,234,0.18);
+}
+
+/* Compact variant for small screens */
 @media (max-width: 768px) {
   .sidebar {
-    display: flex;
-    gap: 15px;
+    width: 100%;
+    position: static;
   }
 
   .sidebar-section {
-    flex: 1;
+    padding: 14px;
   }
 }
