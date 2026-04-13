@@ -81,6 +81,21 @@ export default function Home() {
     { name: 'Công Ty Cổ Phần BCONS PS', jobs: 4 }
   ];
 
+  const popularIndustries = [
+    { key: 'kinh-doanh', name: 'Kinh Doanh', count: '11K+', color: '#E6F0FF', icon: '💼' },
+    { key: 'nhan-su', name: 'Nhân Sự', count: '1.9K+', color: '#FFF0F6', icon: '👥' },
+    { key: 'luat', name: 'Luật', count: '510+', color: '#F5F7FF', icon: '📜' },
+    { key: 'ke-toan', name: 'Kế Toán', count: '4.1K+', color: '#FFF7ED', icon: '🧾' },
+    { key: 'cong-nghe', name: 'Công Nghệ', count: '1.9K+', color: '#F0FDFF', icon: '🧠' },
+    { key: 'marketing', name: 'Marketing', count: '3.8K+', color: '#F0FFF6', icon: '📣' },
+    { key: 'tai-chinh', name: 'Tài Chính', count: '2.2K+', color: '#FFF8F0', icon: '💰' },
+    { key: 'san-xuat', name: 'Sản Xuất', count: '3.8K+', color: '#F7FBFF', icon: '🏭' },
+    { key: 'logistics', name: 'Logistics', count: '3.8K+', color: '#F3FFF7', icon: '🚚' },
+    { key: 'nha-hang', name: 'Nhà Hàng', count: '1.4K+', color: '#FFF5F8', icon: '🍽️' },
+    { key: 'thiet-ke', name: 'Thiết Kế', count: '2.4K+', color: '#FFF8FF', icon: '🎨' },
+    { key: 'y-te', name: 'Y Tế', count: '800+', color: '#FFF0F4', icon: '❤️' }
+  ];
+
   return (
     <div className="home-container">
       {/* Hero Section */}
@@ -297,6 +312,37 @@ export default function Home() {
                 <div className="employer-name">{e.name}</div>
                 <div className="employer-badge">{e.jobs} việc làm đang tuyển</div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Popular industries */}
+      <section className="popular-industries">
+        <div className="pi-container">
+          <div className="pi-header">
+            <h3>Ngành Nghề Nổi Bật</h3>
+            <a className="pi-more" href="/jobs">Xem thêm ›</a>
+          </div>
+
+          <div className="pi-grid">
+            {popularIndustries.map(ind => (
+              <button
+                key={ind.key}
+                className="pi-card"
+                onClick={() => {
+                  setKeyword(ind.name); // cập nhật search từ khoá nếu muốn
+                  filterJobs(); // chạy filter hiện có
+                  window.scrollTo({ top: 300, behavior: 'smooth' });
+                }}
+                style={{ background: ind.color }}
+              >
+                <div className="pi-icon">{ind.icon}</div>
+                <div className="pi-info">
+                  <div className="pi-name">{ind.name}</div>
+                  <div className="pi-count">{ind.count} Việc làm</div>
+                </div>
+              </button>
             ))}
           </div>
         </div>
