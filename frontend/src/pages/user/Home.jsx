@@ -5,6 +5,7 @@ import { getAllJobs } from '../../services/jobService';
 import Sidebar from '../../components/Sidebar';
 import '../../styles/Home.css';
 
+
 export default function Home() {
   const navigate = useNavigate();
   const [keyword, setKeyword] = useState('');
@@ -85,18 +86,18 @@ export default function Home() {
   ];
 
   const popularIndustries = [
-    { key: 'kinh-doanh', name: 'Kinh Doanh', count: '11K+', color: '#E6F0FF', icon: '💼' },
-    { key: 'nhan-su', name: 'Nhân Sự', count: '1.9K+', color: '#FFF0F6', icon: '👥' },
-    { key: 'luat', name: 'Luật', count: '510+', color: '#F5F7FF', icon: '📜' },
-    { key: 'ke-toan', name: 'Kế Toán', count: '4.1K+', color: '#FFF7ED', icon: '🧾' },
-    { key: 'cong-nghe', name: 'Công Nghệ', count: '1.9K+', color: '#F0FDFF', icon: '🧠' },
-    { key: 'marketing', name: 'Marketing', count: '3.8K+', color: '#F0FFF6', icon: '📣' },
-    { key: 'tai-chinh', name: 'Tài Chính', count: '2.2K+', color: '#FFF8F0', icon: '💰' },
-    { key: 'san-xuat', name: 'Sản Xuất', count: '3.8K+', color: '#F7FBFF', icon: '🏭' },
-    { key: 'logistics', name: 'Logistics', count: '3.8K+', color: '#F3FFF7', icon: '🚚' },
-    { key: 'nha-hang', name: 'Nhà Hàng', count: '1.4K+', color: '#FFF5F8', icon: '🍽️' },
-    { key: 'thiet-ke', name: 'Thiết Kế', count: '2.4K+', color: '#FFF8FF', icon: '🎨' },
-    { key: 'y-te', name: 'Y Tế', count: '800+', color: '#FFF0F4', icon: '❤️' }
+    { key: 'kinh-doanh', name: 'Kinh Doanh', count: '11K+', color: '#E6F0FF', icon: 'A' },
+    { key: 'nhan-su', name: 'Nhân Sự', count: '1.9K+', color: '#FFF0F6',icon: 'B' },
+    { key: 'luat', name: 'Luật', count: '510+', color: '#F5F7FF',icon : 'C' },
+    { key: 'ke-toan', name: 'Kế Toán', count: '4.1K+', color: '#FFF7ED',icon: 'D' },
+    { key: 'cong-nghe', name: 'Công Nghệ', count: '1.9K+', color: '#F0FDFF',icon: 'E' },
+    { key: 'marketing', name: 'Marketing', count: '3.8K+', color: '#F0FFF6',icon: 'F' },
+    { key: 'tai-chinh', name: 'Tài Chính', count: '2.2K+', color: '#FFF8F0',icon: 'G' },
+    { key: 'san-xuat', name: 'Sản Xuất', count: '3.8K+', color: '#F7FBFF',icon: 'H' },
+    { key: 'logistics', name: 'Logistics', count: '3.8K+', color: '#F3FFF7',icon: 'I' },
+    { key: 'nha-hang', name: 'Nhà Hàng', count: '1.4K+', color: '#FFF5F8',icon: 'J' },
+    { key: 'thiet-ke', name: 'Thiết Kế', count: '2.4K+', color: '#FFF8FF',icon: 'K' },
+    { key: 'y-te', name: 'Y Tế', count: '800+', color: '#FFF0F4', icon: 'L' }
   ];
 
   return (
@@ -280,6 +281,7 @@ export default function Home() {
         </div>
       </section>
       {/* Featured employers */}
+      <CompaniesSection />
       <section className="featured-employers">
         <div className="fe-container">
           <h3>Nhà Tuyển Dụng Tiêu Biểu</h3>

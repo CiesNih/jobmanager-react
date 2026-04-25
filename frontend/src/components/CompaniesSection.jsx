@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getAllCompanies } from '../services/companyService';
-import '../styles/Companies.css';
+import '../styles/CompaniesSection.css';
+import { useNavigate } from 'react-router-dom'; // THÊM DÒNG NÀY
 
 export default function CompaniesSection({ jobs = [] }) {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     let mounted = true;
@@ -12,7 +14,7 @@ export default function CompaniesSection({ jobs = [] }) {
       setLoading(true);
       try {
         const data = await getAllCompanies();
-        if (mounted) setCompanies(Array.isArray(data) ? data : []);
+        if (mounted) setCompanies(Array.isArray(data) ? data.slice(0, 6) : []);
       } catch (err) {
         console.error('Load companies error', err);
         if (mounted) setCompanies([]);
@@ -23,6 +25,7 @@ export default function CompaniesSection({ jobs = [] }) {
     return () => { mounted = false; };
   }, []);
 
+  // Logic đếm số việc làm (Đã chuẩn)
   const counts = useMemo(() => {
     const m = {};
     for (const j of jobs || []) {
@@ -37,34 +40,39 @@ export default function CompaniesSection({ jobs = [] }) {
 
   return (
     <section className="companies-section">
-      <div className="companies-header">
-        <h2>Doanh nghiệp hàng đầu đang tuyển dụng</h2>
-        <p className="companies-sub">Các công ty hàng đầu đang tuyển dụng</p>
-      </div>
+      <div className="container">
+        <h2 className="section-title">Doanh nghiệp hàng đầu đang tuyển dụng</h2>
+        <span className="section-subtitle">Khám phá cơ hội nghề nghiệp tại các công ty uy tín</span>
+        
+        <div className="company-grid">
+          {companies.map((c) => {
 
-      <div className="companies-grid">
-        {companies.map((c) => {
-          const key = c.maCongTy ?? c.tenCongTy;
-          const jobsCount = counts[c.tenCongTy] || 0;
-          return (
-            <div className="company-card" key={key}>
-              <div className="company-logo">
-                {c.logo ? (
-                  <img src={c.logo} alt={c.tenCongTy} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                ) : (
-                  <div className="company-logo-placeholder">{(c.tenCongTy || 'C').charAt(0)}</div>
-                )}
-              </div>
-
-              <div className="company-body">
-                <h3 className="company-name">{c.tenCongTy}</h3>
-                <div className="company-meta">
-                  <span className="jobs-count">{jobsCount} việc làm đang tuyển</span>
+            const jobCount = counts[c.tenCongTy] || 0;
+            
+            return (
+              <div 
+                className="company-card" 
+                key={c.maCongTy} 
+                onClick={() => navigate(`/companies/${c.maCongTy}`)}
+              >
+                <div className="company-logo-wrapper">
+                  {c.logo ? (
+                    <img src={c.logo} alt={c.tenCongTy} />
+                  ) : (
+                    <span>{c.tenCongTy?.charAt(0)}</span>
+                  )}
+                </div>
+                <div className="company-info-text">
+                  <h4>{c.tenCongTy}</h4>
+                  {/* HIỂN THỊ SỐ LƯỢNG THẬT TẠI ĐÂY */}
+                  <span className="company-jobs-count">
+                    {jobCount} việc làm đang tuyển
+                  </span>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </section>
   );

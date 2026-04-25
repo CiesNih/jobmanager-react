@@ -13,7 +13,7 @@ export default function CompaniesPage() {
   // States cho Tìm kiếm và Phân trang
   const [keyword, setKeyword] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 12; // Số công ty hiển thị mỗi trang
+  const itemsPerPage = 12; 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +64,7 @@ export default function CompaniesPage() {
   const currentDate = new Date();
   const currentMonthYear = `T${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
 
-  // Dữ liệu giả lập cho thanh Category giống ảnh
+  // Dữ liệu giả lập cho thanh Category 
   const categories = [
     { title: 'Tiêu Biểu', sub: '540+ Doanh nghiệp' },
     { title: 'Nổi Bật', sub: '440+ Doanh nghiệp' },
@@ -76,7 +76,6 @@ export default function CompaniesPage() {
 
   return (
     <div className="cp-wrapper">
-      {/* 1. Hero Section (Màu xanh nhạt chứa thanh tìm kiếm) */}
       <section className="cp-hero">
         <div className="cp-container">
           <h1>Các công ty hàng đầu đang tuyển dụng</h1>
@@ -96,10 +95,9 @@ export default function CompaniesPage() {
       </section>
 
       <div className="cp-container">
-        {/* 2. Breadcrumb & Tiêu đề */}
         <h2 className="cp-main-title">Doanh nghiệp hàng đầu đang tuyển dụng</h2>
 
-        {/* 3. Danh mục các bộ lọc (Slider tĩnh) */}
+        {/*Danh mục các bộ lọc (Slider tĩnh) */}
         <div className="cp-categories">
           {categories.map((cat, index) => (
             <div className="cp-cat-card" key={index}>
@@ -109,12 +107,12 @@ export default function CompaniesPage() {
           ))}
         </div>
 
-        {/* 4. Tiêu đề đếm số lượng */}
+        {/* Tiêu đề đếm số lượng */}
         <h3 className="cp-count-title">
           {filteredCompanies.length} Doanh nghiệp đang tuyển dụng {currentMonthYear}
         </h3>
 
-        {/* 5. Lưới danh sách công ty */}
+        {/* Lưới danh sách công ty */}
         {loading ? (
           <p className="cp-loading">Đang tải danh sách doanh nghiệp...</p>
         ) : (
@@ -135,7 +133,6 @@ export default function CompaniesPage() {
                     </div>
                     <div className="cp-info">
                       <h4 className="cp-name">{c.tenCongTy}</h4>    
-                      {/* Nhớ sửa mota thành moTa */}
                       <p className="cp-industry" title={c.moTa}>
                         {c.moTa || 'Đa ngành nghề'}
                       </p>
