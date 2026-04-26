@@ -3,7 +3,7 @@
   max-width: 1200px;
   margin: 20px auto;
   display: grid;
-  grid-template-columns: 2fr 1fr; /* Chia 2 cột: Chính 66%, Sidebar 33% */
+  grid-template-columns: 2fr 1fr;
   gap: 20px;
   padding: 0 15px;
   font-family: 'Inter', sans-serif;
@@ -96,7 +96,7 @@
 
 .btn-apply-large {
   flex: 1;
-  background: #2d56a1; /* Màu xanh đậm chuyên nghiệp */
+  background: #2d56a1; 
   color: white;
   border: none;
   padding: 14px;
@@ -147,7 +147,7 @@
 .job-description-text {
   line-height: 1.8;
   color: #555;
-  white-space: pre-line; /* Quan trọng: Giữ xuống dòng từ dữ liệu SQL */
+  white-space: pre-line; 
 }
 
 /* Sidebar bên phải */

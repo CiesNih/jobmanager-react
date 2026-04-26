@@ -1,0 +1,141 @@
+/* =========================================
+   COMPANIES SECTION (DÁNG VẺ MỚI SIÊU XỊN)
+========================================= */
+
+/* Tổng thể section: Thêm padding trên dưới cho thoáng */
+.companies-section {
+  padding: 80px 0; /* Tăng padding để trang chủ có chiều sâu */
+  background-color: #fff;
+}
+
+/* Tiêu đề chính: Đậm, to, sang trọng */
+.companies-section .section-title {
+  font-size: 28px; /* To hơn xíu */
+  font-weight: 800; /* Đậm hơn */
+  color: #1a1a1a; /* Màu đen sang hơn */
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+/* Tiêu đề phụ: Màu xám nhẹ nhàng */
+.companies-section .section-subtitle {
+  font-size: 16px;
+  color: #718096;
+  margin-bottom: 40px; /* Tạo khoảng cách với lưới thẻ */
+  display: block;
+}
+
+/* =========================================
+   KHUNG LƯỚI (GRID) - CANH CHỈNH LẠI
+========================================= */
+.company-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 cột ở màn hình PC */
+  gap: 20px; /* GIẢM GAP ĐỂ CÁC THẺ KHÍT NHAU HƠN */
+}
+
+/* =========================================
+   THẺ CÔNG TY (CARD) - THAY ĐỔI LỚN
+========================================= */
+.company-card {
+  display: flex;
+  align-items: center;
+  padding: 25px; /* TĂNG PADDING ĐỂ THẺ THOÁNG ĐÃNG, SANG TRỌNG */
+  border: 1px solid #e2e8f0; /* Viền mờ hơn cho tinh tế */
+  border-radius: 16px; /* Bo góc nhiều hơn cho hiện đại */
+  background: #fff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Hiệu ứng mượt hơn */
+  cursor: pointer;
+  text-decoration: none;
+  position: relative; /* Để làm hiệu ứng hover nâng cao */
+  overflow: hidden; /* Để bo góc logo không bị tràn */
+}
+
+/* Hiệu ứng Hover nâng cao: Chỉ đổi màu viền nhẹ và đổ bóng tinh tế */
+.company-card:hover {
+  border-color: #b3d4ff; /* Viền xanh dương nhạt khi hover */
+  box-shadow: 0 10px 25px rgba(45, 86, 161, 0.08); /* Đổ bóng nhẹ nhàng, sang trọng */
+  transform: translateY(-5px); /* Nâng thẻ lên một chút */
+}
+
+/* =========================================
+   LOGO CÔNG TY - ĐẸP HƠN
+========================================= */
+.company-logo-wrapper {
+  width: 70px; /* To hơn xíu */
+  height: 70px; /* To hơn xíu */
+  background: #f7fafc; /* Nền xám cực nhẹ cho logo nền trắng nổi lên */
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px; /* Tăng khoảng cách với chữ */
+  flex-shrink: 0;
+  font-weight: 800;
+  font-size: 28px;
+  color: #2d56a1;
+  overflow: hidden;
+  border: 1px solid #edf2f7; /* Viền siêu mờ cho logo wrapper */
+}
+
+.company-logo-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Đảm bảo logo không bị méo */
+  padding: 8px; /* Padding nhỏ để logo không chạm viền wrapper */
+}
+
+/* =========================================
+   THÔNG TIN CÔNG TY - XỬ LÝ "NUỐT CHỮ"
+========================================= */
+.company-info-text {
+  flex: 1;
+  overflow: hidden; /* Quan trọng để xử lý chữ dài */
+}
+
+/* Tên công ty: Sang, đậm, và KHÔNG RỚT DÒNG */
+.company-info-text h4 {
+  margin: 0 0 8px 0;
+  font-size: 17px;
+  color: #2d3748;
+  font-weight: 700;
+  
+  /* CỰC KỲ QUAN TRỌNG: Xử lý tên quá dài hiện dấu ... */
+  white-space: nowrap; /* Ép chữ nằm trên 1 dòng */
+  overflow: hidden; /* Ẩn phần chữ thừa */
+  text-overflow: ellipsis; /* Hiện dấu ... ở cuối */
+}
+
+/* Thẻ đếm số việc làm: Giống JobsGO */
+.company-jobs-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2d56a1;
+  background: #ebf2ff; /* Màu nền xanh dương nhạt */
+  padding: 6px 14px; /* Padding chuẩn cho badge */
+  border-radius: 20px;
+  display: inline-block;
+  transition: background 0.2s;
+}
+
+.company-card:hover .company-jobs-count {
+  background: #dbeafe; /* Đậm hơn xíu khi hover thẻ */
+}
+
+/* =========================================
+   RESPONSIVE - ĐẸP TRÊN MỌI MÀN HÌNH
+========================================= */
+@media (max-width: 1024px) {
+  .company-grid { gap: 15px; }
+  .company-card { padding: 20px; }
+}
+
+@media (max-width: 992px) {
+  .company-grid { grid-template-columns: repeat(2, 1fr); } /* 2 cột ở tablet */
+}
+
+@media (max-width: 640px) {
+  .company-grid { grid-template-columns: 1fr; } /* 1 cột ở mobile */
+  .cd-header-content { flex-direction: column; text-align: center; }
+  .cd-meta { justify-content: center; }
+}

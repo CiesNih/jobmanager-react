@@ -2,7 +2,7 @@
    COMPANIES PAGE 
 ========================================= */
 .cp-wrapper {
-  background-color: #f8f9fa; /* Nền xám nhạt toàn trang giống ảnh */
+  background-color: #f8f9fa; 
   min-height: 100vh;
   padding-bottom: 60px;
 }
@@ -15,7 +15,7 @@
 
 /* 1. Hero Section */
 .cp-hero {
-  background: linear-gradient(to right, #eef7ff, #f8fcff); /* Gradient xanh siêu nhạt */
+  background: linear-gradient(to right, #eef7ff, #f8fcff);
   padding: 40px 0;
   border-bottom: 1px solid #eaeaea;
 }
@@ -47,7 +47,7 @@
 }
 
 .cp-btn-search {
-  background-color: #0b5ed7; /* Màu xanh đậm y hệt JobsGO */
+  background-color: #0b5ed7; 
   color: white;
   border: none;
   padding: 0 30px;
@@ -83,7 +83,7 @@
   display: flex;
   gap: 15px;
   margin-bottom: 30px;
-  overflow-x: auto; /* Cho phép cuộn ngang nếu màn hình nhỏ */
+  overflow-x: auto; 
   padding-bottom: 10px;
 }
 
