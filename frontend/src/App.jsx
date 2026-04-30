@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-// 1. Import Layouts (Đã sửa thành UserLayout cho khớp với tên file của bạn)
+// 1. Import Layouts 
 import UserLayout from './layouts/UserLayout';
 import AdminLayout from './layouts/AdminLayout';
 
-// 2. Import Pages (Đã thêm đường dẫn /user/ cho khớp với thư mục của bạn)
+// 2. Import Pages 
 import Home from './pages/user/Home';
 import CandidateListPage from './pages/user/CandidateListPage';
 import CompaniesPage from './pages/user/CompanyListPage';
@@ -13,7 +13,8 @@ import CompanyDetail from './pages/user/CompanyDetail';
 import JobDetail from './pages/user/JobDetail';
 import JobListPage from './pages/user/JobListPage';
 
-// (Nếu bạn để TestAPI ở ngoài cùng thư mục pages thì giữ đường dẫn này)
+import Dashboard from './pages/admin/Dashboard';
+// test
 import TestAPI from './pages/TestAPI'; 
 
 // 3. Import Components
@@ -21,7 +22,7 @@ import ScrollToTop from './components/ScrollToTop';
 import AuthModal from './components/AuthModal';
 import './styles/App.css';
 
-const AdminDashboard = () => <h1>Chào mừng đến với Bảng Điều Khiển Admin!</h1>;
+
 
 function AppContent() {
   const location = useLocation();
@@ -66,7 +67,7 @@ function AppContent() {
             NHÁNH 2: DÀNH CHO ADMIN
         ========================================= */}
         <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
+          <Route index element={<Dashboard />} />
         </Route>
 
         {/* =========================================
