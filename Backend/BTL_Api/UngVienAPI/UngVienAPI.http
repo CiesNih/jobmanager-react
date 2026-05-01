@@ -1,0 +1,6 @@
+@UngVienAPI_HostAddress = http://localhost:5283
+
+GET {{UngVienAPI_HostAddress}}/api/ungvien
+Accept: application/json
+
+###
