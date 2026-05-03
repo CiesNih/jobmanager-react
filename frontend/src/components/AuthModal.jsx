@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Auth.css';
 
 export default function AuthModal({ mode = 'login', onClose = () => {} }) {
@@ -6,20 +7,88 @@ export default function AuthModal({ mode = 'login', onClose = () => {} }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    setTab(mode);
-  }, [mode]);
 
-  const submitLogin = (e) => {
+  useEffect(() => setTab(mode), [mode]);
+
+
+  const staticUsers = [
+    { 
+      email: 'candidate11@example.com', 
+      password: '123456', 
+      role: 'user', 
+      name: 'Bùi Tạp Vụ' 
+    },
+    { 
+      email: 'admin@example.com', 
+      password: 'admin123', 
+      role: 'admin', 
+      name: 'Quản trị viên' 
+    }
+  ];
+
+  // 2. XỬ LÝ SUBMIT ĐĂNG NHẬP
+  const submitLogin = async (e) => {
     e.preventDefault();
-    console.log('login', { email, password, remember });
-    if (onClose) onClose();
+    setError('');
+    setLoading(true);
+
+    try {
+      // Giả lập thời gian chờ của mạng (delay 800ms) cho chân thực
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      // Kiểm tra tài khoản
+      const foundUser = staticUsers.find(
+        (u) => u.email === email && u.password === password
+      );
+
+      if (!foundUser) {
+        setError('Đăng nhập thất bại. Sai email hoặc mật khẩu!');
+        setLoading(false);
+        return;
+      }
+
+      // Đăng nhập thành công: Lưu thông tin vào localStorage để App nhận diện
+      const userSession = {
+        id: foundUser.email,
+        name: foundUser.name,
+        role: foundUser.role,
+        token: 'fake-jwt-token-123'
+      };
+
+      if (remember) {
+        localStorage.setItem('authUser', JSON.stringify(userSession));
+      } else {
+        sessionStorage.setItem('authUser', JSON.stringify(userSession)); // Tắt trình duyệt là mất
+      }
+      window.dispatchEvent(new Event('authChange'));
+
+      // Đóng modal trước
+      if (onClose) onClose();
+
+      // Chuyển hướng người dùng dựa theo role
+      if (foundUser.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
+
+    } catch (err) {
+      console.error('Lỗi logic:', err);
+      setError('Có lỗi xảy ra. Vui lòng thử lại.');
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // 3. XỬ LÝ SUBMIT ĐĂNG KÝ (Tạm thời chuyển về tab đăng nhập)
   const submitRegister = (e) => {
     e.preventDefault();
-    console.log('register (modal)');
+    alert('Chức năng đăng ký đang được hoàn thiện!');
     setTab('login');
   };
 
@@ -30,12 +99,11 @@ export default function AuthModal({ mode = 'login', onClose = () => {} }) {
 
         <h3 className="auth-title">{tab === 'login' ? 'Đăng nhập hệ thống' : 'Tạo tài khoản'}</h3>
 
-
-        <div className="auth-or">Hoặc đăng nhập bằng tài khoản</div>
+        <div className="auth-or">Hoặc đăng nhập bằng tài khoản đã có</div>
 
         {tab === 'login' ? (
           <form onSubmit={submitLogin} className="auth-form">
-            <label>Tài khoản</label>
+            <label>Tài khoản (Email)</label>
             <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
             <label>Mật khẩu</label>
@@ -48,7 +116,11 @@ export default function AuthModal({ mode = 'login', onClose = () => {} }) {
               <a className="auth-forgot" href="#!" onClick={(e)=>e.preventDefault()}>Quên mật khẩu?</a>
             </div>
 
-            <button className="auth-primary" type="submit">ĐĂNG NHẬP</button>
+            {error && <div style={{ color: 'crimson', marginBottom: 8 }}>{error}</div>}
+
+            <button className="auth-primary" type="submit" disabled={loading}>
+              {loading ? 'Đang đăng nhập...' : 'ĐĂNG NHẬP'}
+            </button>
 
             <div className="auth-footer">
               Bạn chưa có tài khoản? <button type="button" className="link-like" onClick={() => setTab('register')}>Đăng ký nhanh</button>

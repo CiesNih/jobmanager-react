@@ -177,7 +177,106 @@
 .mega-menu {
   animation: fadeIn 0.2s ease-out;
 }
+/* --- GIAO DIỆN NÚT "XIN CHÀO" --- */
+.header-user {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
 
+.user-btn {
+  background: transparent;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.2s;
+}
+
+.user-btn:hover {
+  color: #3c8dbc;
+}
+
+.user-name {
+  font-size: 14.5px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+}
+
+
+.custom-dropdown {
+  position: absolute;
+  top: calc(100% + 15px);
+  right: 0;
+  background: white;
+  min-width: 240px; 
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+}
+
+
+.custom-dropdown::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  right: 20px;
+  width: 12px;
+  height: 12px;
+  background: white;
+  transform: rotate(45deg);
+  border-top: 1px solid #eee;
+  border-left: 1px solid #eee;
+}
+
+
+.custom-dropdown .menu-item {
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  background-color: #f8f9fa; 
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: none;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  position: relative;
+  z-index: 2; 
+}
+
+.custom-dropdown .menu-item:last-child {
+  margin-bottom: 0;
+}
+
+.custom-dropdown .menu-item:hover {
+  background-color: #e9ecef; 
+  color: #3c8dbc;
+}
+
+
+.menu-divider {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 4px 0 12px 0;
+}
+
+.logout-item {
+  color: #d9534f !important;
+  font-weight: 500;
+}
+
+.logout-item:hover {
+  background-color: #fdf2f2 !important; 
+}
 @keyframes fadeIn {
   from { opacity: 0; transform: translate(-50%, 10px); }
   to { opacity: 1; transform: translate(-50%, 0); }

@@ -14,6 +14,7 @@ import JobDetail from './pages/user/JobDetail';
 import JobListPage from './pages/user/JobListPage';
 
 import Dashboard from './pages/admin/Dashboard';
+import ManageUsers from './pages/admin/ManageUsers';
 // test
 import TestAPI from './pages/TestAPI'; 
 
@@ -68,6 +69,7 @@ function AppContent() {
         ========================================= */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
+          <Route path="users" element={<ManageUsers />} />
         </Route>
 
         {/* =========================================
