@@ -12,9 +12,12 @@ import CompaniesPage from './pages/user/CompanyListPage';
 import CompanyDetail from './pages/user/CompanyDetail';
 import JobDetail from './pages/user/JobDetail';
 import JobListPage from './pages/user/JobListPage';
+import SalaryCalculator from './pages/user/SalaryCalculator'; // Trang tính lương mới
 
 import Dashboard from './pages/admin/Dashboard';
 import ManageUsers from './pages/admin/ManageUsers';
+import ManageEmployers from './pages/admin/ManageEmployers';
+import ManageJobCategories from './pages/admin/ManageJobCategories';
 // test
 import TestAPI from './pages/TestAPI'; 
 
@@ -62,6 +65,7 @@ function AppContent() {
           <Route path="/jobs/:id" element={<JobDetail />} />
           <Route path="/companies" element={<CompaniesPage />} />
           <Route path="/companies/:id" element={<CompanyDetail />} />
+          <Route path="/tools/salary-calculator" element={<SalaryCalculator />} />
         </Route>
 
         {/* =========================================
@@ -70,12 +74,15 @@ function AppContent() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="users" element={<ManageUsers />} />
+          <Route path="employers" element={<ManageEmployers />} />
+          <Route element={<ManageJobCategories />} path="/admin/categories" />
         </Route>
 
         {/* =========================================
             CÁC TRANG ĐỘC LẬP
         ========================================= */}
         <Route path="/test-api" element={<TestAPI />} />
+        
       </Routes>
 
       {location.pathname === '/' && showAuth && (

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getAllCompanies } from '../services/companyService';
 import '../styles/CompaniesSection.css';
-import { useNavigate } from 'react-router-dom'; // THÊM DÒNG NÀY
+import { useNavigate } from 'react-router-dom';
 
 export default function CompaniesSection({ jobs = [] }) {
   const [companies, setCompanies] = useState([]);
@@ -24,14 +24,13 @@ export default function CompaniesSection({ jobs = [] }) {
     })();
     return () => { mounted = false; };
   }, []);
-
-  // Logic đếm số việc làm (Đã chuẩn)
   const counts = useMemo(() => {
     const m = {};
     for (const j of jobs || []) {
-      const name = (j.tenCongTy || '').trim();
-      if (!name) continue;
-      m[name] = (m[name] || 0) + 1;
+      
+      const compId = j.maCongTy; 
+      if (!compId) continue;
+      m[compId] = (m[compId] || 0) + 1;
     }
     return m;
   }, [jobs]);
@@ -46,27 +45,39 @@ export default function CompaniesSection({ jobs = [] }) {
         
         <div className="company-grid">
           {companies.map((c) => {
-
-            const jobCount = counts[c.tenCongTy] || 0;
+            const jobsCount = counts[c.maCongTy] || 0;
+            
+            // ==========================================
+            // LOGIC XỬ LÝ LOGO MỚI Ở ĐÂY
+            // ==========================================
+            const displayLogo = (c.logo && c.logo.startsWith('http'))
+              ? c.logo 
+              : `https://ui-avatars.com/api/?name=${encodeURIComponent(c.tenCongTy)}&background=random&color=fff&size=128`;
             
             return (
               <div 
                 className="company-card" 
                 key={c.maCongTy} 
                 onClick={() => navigate(`/companies/${c.maCongTy}`)}
+                style={{ cursor: 'pointer' }}
               >
                 <div className="company-logo-wrapper">
-                  {c.logo ? (
-                    <img src={c.logo} alt={c.tenCongTy} />
-                  ) : (
-                    <span>{c.tenCongTy?.charAt(0)}</span>
-                  )}
+                  
+                  <img 
+                    src={displayLogo} 
+                    alt={c.tenCongTy} 
+                    onError={(e) => {
+                      e.target.onerror = null; 
+                      e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(c.tenCongTy)}&background=random&color=fff&size=128`;
+                    }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
+                  />
                 </div>
                 <div className="company-info-text">
                   <h4>{c.tenCongTy}</h4>
-                  {/* HIỂN THỊ SỐ LƯỢNG THẬT TẠI ĐÂY */}
+                  
                   <span className="company-jobs-count">
-                    {jobCount} việc làm đang tuyển
+                    {jobsCount} việc làm đang tuyển
                   </span>
                 </div>
               </div>

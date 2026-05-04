@@ -8,7 +8,8 @@ const AdminSidebar = () => {
         <span>Admin Panel</span>
       </div>
       <ul className="admin-menu">
-        {/* Dùng NavLink để hỗ trợ active menu */}
+        
+        {/* Phần 1: Thống kê & Người dùng */}
         <li>
           <NavLink to="/admin" end className={({ isActive }) => isActive ? "active" : ""}>
             Tổng quan
@@ -26,9 +27,27 @@ const AdminSidebar = () => {
         </li>
         <li>
           <NavLink to="/admin/jobs" className={({ isActive }) => isActive ? "active" : ""}>
-            Duyệt tin tuyển dụng
+            Quản lý Tin tuyển dụng
           </NavLink>
         </li>
+        
+        <li>
+          <NavLink to="/admin/categories" className={({ isActive }) => isActive ? "active" : ""}>
+            Danh mục việc làm
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink to="/admin/reports" className={({ isActive }) => isActive ? "active" : ""}>
+            Báo cáo & Vi phạm
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/admin/settings" className={({ isActive }) => isActive ? "active" : ""}>
+            Cài đặt hệ thống
+          </NavLink>
+        </li>
+
       </ul>
     </aside>
   );
