@@ -60,7 +60,7 @@ export default function CompaniesPage() {
     currentPage * itemsPerPage
   );
 
-  // Lấy thời gian hiện tại (VD: T4/2026)
+  // Lấy thời gian hiện tại (VD: T5/2026)
   const currentDate = new Date();
   const currentMonthYear = `T${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
 
@@ -120,16 +120,28 @@ export default function CompaniesPage() {
             {paginatedCompanies.map((c) => {
               const key = c.maCongTy ?? c.tenCongTy;
               const jobsCount = counts[c.tenCongTy] || 0;
+
+              // ==========================================
+              // LOGIC XỬ LÝ LOGO ĐƯỢC CẬP NHẬT TẠI ĐÂY
+              // ==========================================
+              const displayLogo = (c.logo && c.logo.startsWith('http'))
+                ? c.logo 
+                : `https://ui-avatars.com/api/?name=${encodeURIComponent(c.tenCongTy)}&background=random&color=fff&size=128`;
+
               return (
-                
                 <div className="cp-card" key={key} onClick={() => navigate(`/companies/${c.maCongTy}`)} style={{ cursor: 'pointer' }}>
                   <div className="cp-card-top">
                     <div className="cp-logo">
-                      {c.logo ? (
-                        <img src={c.logo} alt={c.tenCongTy} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                      ) : (
-                        <span>{(c.tenCongTy || 'C').charAt(0)}</span>
-                      )}
+                      
+                      <img 
+                        src={displayLogo} 
+                        alt={c.tenCongTy} 
+                        onError={(e) => {
+                          e.target.onerror = null; 
+                          e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(c.tenCongTy)}&background=random&color=fff&size=128`;
+                        }}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
+                      />
                     </div>
                     <div className="cp-info">
                       <h4 className="cp-name">{c.tenCongTy}</h4>    
@@ -147,7 +159,7 @@ export default function CompaniesPage() {
           </div>
         )}
 
-        {/* 6. Phân trang (Pagination) */}
+        {/* Phân trang (Pagination) */}
         {!loading && totalPages > 1 && (
           <div className="cp-pagination">
             <button 
