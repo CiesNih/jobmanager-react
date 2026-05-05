@@ -1,32 +1,123 @@
 /* ========================================================
    FILE: src/styles/admin.css
+   OPTIMIZED VERSION - Fixed duplicates, added CSS variables
    ======================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-/* --- 1. BỘ KHUNG LAYOUT CHÍNH (Lỗi nằm ở đây do lúc nãy mình thiếu) --- */
-.admin-container {
-  display: flex; /* CHÌA KHÓA CHIA CỘT Ở ĐÂY */
-  height: 100vh;
-  font-family: 'Roboto', sans-serif;
-  background-color: #ecf0f5; 
-  margin: 0;
+/* ========================================================
+   CSS VARIABLES - Centralized Design Tokens
+   ======================================================== */
+:root {
+  /* Colors - Primary */
+  --color-primary: #3c8dbc;
+  --color-primary-dark: #367fa9;
+  --color-primary-light: #00c0ef;
+  
+  /* Colors - Status */
+  --color-success: #00a65a;
+  --color-warning: #f39c12;
+  --color-danger: #dd4b39;
+  --color-info: #0d6efd;
+  
+  /* Colors - Neutral */
+  --color-white: #ffffff;
+  --color-gray-50: #f9f9f9;
+  --color-gray-100: #f4f4f4;
+  --color-gray-150: #f1f5f9;
+  --color-gray-200: #ecf0f5;
+  --color-gray-250: #e2e6ea;
+  --color-gray-300: #ddd;
+  --color-gray-350: #d2d6de;
+  --color-gray-400: #b8c7ce;
+  --color-gray-450: #ccc;
+  --color-gray-500: #888;
+  --color-gray-600: #555;
+  --color-gray-650: #6b7280;
+  --color-gray-700: #444;
+  --color-gray-800: #333;
+  --color-gray-900: #222d32;
+  --color-dark: #1e282c;
+  --color-bg-light: #f8f9fa;
+  --color-bg-hover: #f8fafc;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-2xl: 24px;
+  
+  /* Border Radius */
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 1px rgba(0,0,0,0.1);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.05);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.15);
+  --shadow-xl: 0 12px 40px rgba(0,0,0,0.2);
+  --shadow-focus: 0 6px 18px rgba(60,139,203,0.08);
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  
+  /* Z-index Scale */
+  --z-base: 0;
+  --z-dropdown: 10;
+  --z-modal: 1000;
+  --z-modal-overlay: 2000;
+  
+  /* Layout */
+  --sidebar-width: 250px;
+  --header-height: 50px;
 }
 
-/* --- SIDEBAR BÊN TRÁI --- */
+/* ========================================================
+   GLOBAL RESET & BASE STYLES
+   ======================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================================
+   LAYOUT - Main Container & Structure
+   ======================================================== */
+.admin-container {
+  display: flex;
+  height: 100vh;
+  background-color: var(--color-gray-200);
+  overflow: hidden;
+}
+
+/* ========================================================
+   SIDEBAR - Navigation
+   ======================================================== */
 .admin-sidebar {
-  width: 250px;
-  background-color: #222d32;
-  color: white;
+  width: var(--sidebar-width);
+  background-color: var(--color-gray-900);
+  color: var(--color-white);
   display: flex;
   flex-direction: column;
+  box-shadow: var(--shadow-md);
 }
 
 .admin-sidebar .admin-logo {
-  padding: 15px 20px;
+  padding: 15px var(--spacing-xl);
   font-size: 1.2rem;
   font-weight: bold;
-  background-color: #367fa9;
+  background-color: var(--color-primary-dark);
   text-align: left;
   display: flex;
   align-items: center;
@@ -45,22 +136,29 @@
 
 .admin-menu a {
   display: block;
-  padding: 15px 20px;
-  color: #b8c7ce;
+  padding: 15px var(--spacing-xl);
+  color: var(--color-gray-400);
   text-decoration: none;
   border-left: 3px solid transparent;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   font-size: 1rem;
 }
 
 .admin-menu a:hover, 
 .admin-menu a.active {
-  background-color: #1e282c;
-  border-left-color: #3c8dbc;
-  color: #ffffff;
+  background-color: var(--color-dark);
+  border-left-color: var(--color-primary);
+  color: var(--color-white);
 }
 
-/* --- PHẦN NỘI DUNG BÊN PHẢI --- */
+.admin-menu a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+/* ========================================================
+   HEADER & CONTENT AREA
+   ======================================================== */
 .admin-content-wrapper {
   flex: 1;
   display: flex;
@@ -69,40 +167,64 @@
 }
 
 .admin-header {
-  height: 50px;
-  background-color: #3c8dbc;
-  color: white;
+  height: var(--header-height);
+  background-color: var(--color-primary);
+  color: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-main-content {
-  padding: 20px;
+  padding: var(--spacing-xl);
   overflow-y: auto;
   flex: 1;
 }
 
-/* --- 2. THẺ THỐNG KÊ (CLASSIC ADMINLTE STYLE) --- */
+.admin-page-container {
+  padding: var(--spacing-xl);
+  background-color: var(--color-bg-light);
+  min-height: 100vh;
+}
+
+.admin-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+/* ========================================================
+   DASHBOARD - Statistics Cards
+   ======================================================== */
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  gap: var(--spacing-xl);
   margin-bottom: 30px;
 }
 
 .stat-card {
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   position: relative;
   display: block;
-  color: #fff;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-  overflow: hidden; 
+  color: var(--color-white);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .stat-card .inner {
-  padding: 20px;
+  padding: var(--spacing-xl);
+  position: relative;
+  z-index: 1;
 }
 
 .stat-card h3 {
@@ -119,13 +241,14 @@
 }
 
 .stat-card .icon {
-  transition: all 0.3s linear;
+  transition: all var(--transition-normal);
   position: absolute;
   top: -10px;
   right: 10px;
-  z-index: 0;
+  z-index: var(--z-base);
   font-size: 90px;
   color: rgba(0,0,0,0.15);
+  pointer-events: none;
 }
 
 .stat-card:hover .icon {
@@ -138,102 +261,538 @@
   padding: 5px 0;
   color: rgba(255,255,255,0.8);
   display: block;
-  z-index: 10;
+  z-index: var(--z-dropdown);
   background: rgba(0,0,0,0.1);
   text-decoration: none;
   font-size: 14px;
-  transition: background-color 0.2s;
+  transition: background-color var(--transition-fast);
 }
 
 .stat-card-footer:hover {
-  color: #fff;
+  color: var(--color-white);
   background: rgba(0,0,0,0.15);
 }
 
-/* Bảng màu thẻ */
-.bg-orange { background-color: #f39c12; }
-.bg-green { background-color: #00a65a; }
-.bg-blue { background-color: #00c0ef; }
-.bg-red { background-color: #dd4b39; }
+/* Card Color Variants */
+.bg-orange { background-color: var(--color-warning); }
+.bg-green { background-color: var(--color-success); }
+.bg-blue { background-color: var(--color-primary-light); }
+.bg-red { background-color: var(--color-danger); }
 
-/* --- 3. BỐ CỤC BIỂU ĐỒ & BẢNG --- */
+/* ========================================================
+   DASHBOARD - Panels & Sections
+   ======================================================== */
 .dashboard-sections {
   display: grid;
   grid-template-columns: 2fr 1fr; 
-  gap: 20px;
+  gap: var(--spacing-xl);
 }
 
 .dashboard-panel {
-  background: #fff;
-  border-radius: 3px;
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
   padding: 15px;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-  border-top: 3px solid #d2d6de;
+  box-shadow: var(--shadow-sm);
+  border-top: 3px solid var(--color-gray-350);
 }
 
-.dashboard-panel.primary-border { border-top-color: #3c8dbc; } 
-.dashboard-panel.success-border { border-top-color: #00a65a; } 
+.dashboard-panel.primary-border { 
+  border-top-color: var(--color-primary); 
+} 
+
+.dashboard-panel.success-border { 
+  border-top-color: var(--color-success); 
+} 
 
 .dashboard-panel h3 {
   margin-top: 0;
   font-size: 18px;
-  color: #444;
+  color: var(--color-gray-700);
   margin-bottom: 15px;
 }
 
-/* Bảng dữ liệu */
+/* ========================================================
+   TABLES - Data Display
+   ======================================================== */
+.admin-table-wrapper {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
 .admin-table {
   width: 100%;
   border-collapse: collapse;
 }
-.admin-table th, .admin-table td {
-  padding: 10px;
-  border-bottom: 1px solid #f4f4f4;
+
+.admin-table th, 
+.admin-table td {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-gray-100);
   font-size: 14px;
   text-align: left;
+  vertical-align: middle;
 }
-.admin-table th { background-color: #f9f9f9; color: #333; }
 
-/* Loading Spinner */
-.loading-container { display: flex; justify-content: center; align-items: center; height: 50vh; color: #3c8dbc; }
+.admin-table th { 
+  background-color: var(--color-gray-150);
+  font-weight: 600;
+  color: var(--color-gray-800);
+}
 
-/* Quick actions + stats (used in Dashboard) */
-.quick-actions { display:flex; flex-direction:column; gap:10px; }
-.quick-btn { display:block; padding:12px 14px; background:#3c8dbc; color:#fff; border-radius:8px; text-decoration:none; text-align:center; font-weight:600; }
-.stats-list .stat-item { background:#fff; padding:10px; border-radius:6px; border:1px solid #eee; margin-bottom:8px; font-weight:600; }
+.admin-table tr:hover {
+  background-color: var(--color-bg-hover);
+}
 
-/* ManageUsers action buttons & modal */
-.action-buttons { display:flex; gap:8px; }
-.block-btn { padding:8px 12px; border-radius:6px; border:none; cursor:pointer; font-weight:600; }
-.block-add { background:#00a65a; color:#fff; }
-.block-edit { background:#f39c12; color:#fff; }
-.block-delete { background:#dd4b39; color:#fff; }
-.block-reset { background:#6b7280; color:#fff; }
+.admin-table td {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
 
-/* Modal */
-.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; z-index:2000; }
-.modal { background:#fff; padding:16px; border-radius:8px; width:440px; max-width:calc(100% - 24px); box-shadow:0 12px 40px rgba(0,0,0,0.2); }
-.form-row { margin-bottom:10px; }
-.input { width:100%; padding:8px 10px; border-radius:6px; border:1px solid #ddd; outline:none; }
-.input:focus { border-color:#3c8dbc; box-shadow:0 6px 18px rgba(60,139,203,0.08); }
+/* Table Utilities */
+.text-ellipsis {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-/* user search row */
-.user-search { display:flex; gap:8px; align-items:center; }
-.search-input { padding:8px 10px; border-radius:6px; border:1px solid #ddd; min-width:260px; }
+.fw-bold { 
+  font-weight: 600; 
+}
 
-/* role/status badges */
-.status-badge { padding:6px 8px; border-radius:6px; background:#f3f4f6; color:#333; font-weight:600; font-size:13px; }
-.status-badge.active { background:#e6ffed; color:#0b7a3a; border:1px solid #d1f5db; }
+.text-muted { 
+  color: var(--color-gray-500); 
+}
 
-/* table password small font */
-.admin-table td { vertical-align: middle; }
+.text-link { 
+  color: var(--color-info); 
+  text-decoration: none; 
+}
 
-/* small responsive tweak for long GUIDs */
-.admin-table td { word-break: break-all; }
+.text-link:hover {
+  text-decoration: underline;
+}
 
-/* adjust modal width on small screens handled by existing rules */
+/* ========================================================
+   BUTTONS - All Button Styles
+   ======================================================== */
+.btn-primary {
+  background-color: var(--color-info);
+  color: var(--color-white);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color var(--transition-fast);
+}
 
+.btn-primary:hover {
+  background-color: #0b5ed7;
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-info);
+  outline-offset: 2px;
+}
+
+.btn-secondary {
+  background-color: var(--color-bg-light);
+  color: var(--color-gray-800);
+  border: 1px solid var(--color-gray-300);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color var(--transition-fast);
+}
+
+.btn-secondary:hover { 
+  background-color: var(--color-gray-250); 
+}
+
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--color-gray-500);
+  outline-offset: 2px;
+}
+
+/* Action Buttons */
+.action-cell {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.action-buttons { 
+  display: flex; 
+  gap: var(--spacing-sm); 
+}
+
+.btn-icon {
+  background: transparent;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-icon:hover { 
+  background: var(--color-gray-100); 
+}
+
+.btn-icon:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn-icon.delete:hover { 
+  background: #fee2e2; 
+  color: var(--color-danger); 
+  border-color: var(--color-danger); 
+}
+
+/* Text Buttons */
+.text-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  padding: var(--spacing-xs);
+  transition: opacity var(--transition-fast);
+}
+
+.text-btn:hover {
+  opacity: 0.8;
+}
+
+.text-btn.edit-btn { 
+  color: var(--color-info); 
+}
+
+.text-btn.edit-btn:hover { 
+  text-decoration: underline; 
+}
+
+.text-btn.delete-btn { 
+  color: #dc3545; 
+}
+
+.text-btn.delete-btn:hover { 
+  text-decoration: underline; 
+}
+
+/* Block Buttons (Dashboard) */
+.block-btn { 
+  padding: var(--spacing-sm) var(--spacing-md); 
+  border-radius: var(--radius-md); 
+  border: none; 
+  cursor: pointer; 
+  font-weight: 600;
+  transition: opacity var(--transition-fast);
+}
+
+.block-btn:hover {
+  opacity: 0.9;
+}
+
+.block-btn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.block-add { 
+  background: var(--color-success); 
+  color: var(--color-white); 
+}
+
+.block-edit { 
+  background: var(--color-warning); 
+  color: var(--color-white); 
+}
+
+.block-delete { 
+  background: var(--color-danger); 
+  color: var(--color-white); 
+}
+
+.block-reset { 
+  background: var(--color-gray-650); 
+  color: var(--color-white); 
+}
+
+/* Quick Action Buttons */
+.quick-actions { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+}
+
+.quick-btn { 
+  display: block; 
+  padding: var(--spacing-md) 14px; 
+  background: var(--color-primary); 
+  color: var(--color-white); 
+  border-radius: var(--radius-lg); 
+  text-decoration: none; 
+  text-align: center; 
+  font-weight: 600;
+  transition: background-color var(--transition-fast);
+}
+
+.quick-btn:hover {
+  background: var(--color-primary-dark);
+}
+
+.quick-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ========================================================
+   FORMS - Input & Form Elements
+   ======================================================== */
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--color-gray-600);
+}
+
+.form-control,
+.input,
+.search-input {
+  width: 100%;
+  padding: var(--spacing-sm) 10px;
+  border: 1px solid var(--color-gray-450);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-control:focus,
+.input:focus,
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-focus);
+}
+
+.form-row { 
+  margin-bottom: 10px; 
+}
+
+/* Search Row */
+.user-search { 
+  display: flex; 
+  gap: var(--spacing-sm); 
+  align-items: center; 
+}
+
+.search-input { 
+  min-width: 260px; 
+}
+
+/* ========================================================
+   MODALS - Overlay & Dialog
+   ======================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal-overlay);
+  animation: fadeIn var(--transition-fast);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal,
+.modal-content {
+  background: var(--color-white);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 500px;
+  box-shadow: var(--shadow-xl);
+  animation: slideUp var(--transition-normal);
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0); 
+  }
+}
+
+.modal {
+  max-width: 440px;
+  padding: var(--spacing-lg);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-xl);
+  color: var(--color-gray-800);
+  font-size: 1.25rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-2xl);
+}
+
+/* ========================================================
+   BADGES & STATUS INDICATORS
+   ======================================================== */
+.status-badge { 
+  padding: 6px var(--spacing-sm); 
+  border-radius: var(--radius-md); 
+  background: #f3f4f6; 
+  color: var(--color-gray-800); 
+  font-weight: 600; 
+  font-size: 13px;
+  display: inline-block;
+}
+
+.status-badge.active { 
+  background: #e6ffed; 
+  color: #0b7a3a; 
+  border: 1px solid #d1f5db; 
+}
+
+/* ========================================================
+   STATS & MISC COMPONENTS
+   ======================================================== */
+.stats-list .stat-item { 
+  background: var(--color-white); 
+  padding: 10px; 
+  border-radius: var(--radius-md); 
+  border: 1px solid var(--color-gray-100); 
+  margin-bottom: var(--spacing-sm); 
+  font-weight: 600; 
+}
+
+.loading-container { 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  height: 50vh; 
+  color: var(--color-primary); 
+  font-size: 1.2rem;
+}
+
+/* ========================================================
+   RESPONSIVE DESIGN
+   ======================================================== */
 @media (max-width: 992px) {
-  .dashboard-sections { grid-template-columns: 1fr; } 
+  .dashboard-sections { 
+    grid-template-columns: 1fr; 
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
 }
 
+@media (max-width: 768px) {
+  .admin-sidebar {
+    width: 200px;
+  }
+  
+  .admin-menu a {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 0.9rem;
+  }
+  
+  .stat-card h3 {
+    font-size: 28px;
+  }
+  
+  .modal,
+  .modal-content {
+    max-width: calc(100% - var(--spacing-2xl));
+    margin: var(--spacing-md);
+  }
+  
+  .admin-header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-container {
+    flex-direction: column;
+  }
+  
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: var(--spacing-sm);
+    font-size: 12px;
+  }
+  
+  .action-cell {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+}
+
+/* ========================================================
+   ACCESSIBILITY IMPROVEMENTS
+   ======================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
