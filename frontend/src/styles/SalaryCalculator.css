@@ -1,0 +1,173 @@
+.salary-container {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.salary-main {
+  flex: 1;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.salary-sidebar {
+  width: 320px;
+}
+
+.calc-controls .row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.calc-controls label {
+  min-width: 160px;
+  font-weight: 600;
+}
+
+.input {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+}
+
+.small-input {
+  width: 160px;
+}
+
+.mode-buttons button {
+  padding: 8px 12px;
+  margin-right: 8px;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  background: #f7f7f7;
+}
+
+.mode-buttons .active {
+  background: #0b6efd;
+  color: white;
+  border-color: #0b6efd;
+}
+
+.btn {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: #0b6efd;
+  color: #fff;
+  border-color: #0b6efd;
+}
+
+.result-block {
+  margin-top: 18px;
+}
+
+.result-grid {
+  background: #fafafa;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #eee;
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed #eee;
+}
+
+.result-row.total {
+  font-size: 1.05rem;
+  font-weight: 700;
+  border-bottom: none;
+}
+
+.sidebar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sidebar-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  border-top: 4px solid #3c8dbc; 
+}
+
+.sidebar-box h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.sidebar-box p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.sidebar-box p:last-child {
+  margin-bottom: 0;
+}
+
+/* --- Danh sách mức lương --- */
+.positions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.positions-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px dashed #e0e0e0;
+  font-size: 14px;
+  color: #444;
+}
+
+.positions-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.positions-list .range {
+  font-weight: 600;
+  color: #00a65a; 
+}
+
+.sidebar-box.note {
+  background-color: #fff8e1; 
+  border-top: 4px solid #ffb300;
+}
+
+.sidebar-box.note h4 {
+  color: #f57c00;
+}
+
+.sidebar-box.note p {
+  color: #666;
+  font-style: italic;
+  font-size: 13.5px;
+}
+@media (max-width: 900px) {
+  .salary-container { flex-direction: column; }
+  .salary-sidebar { width: 100%; }
+}
