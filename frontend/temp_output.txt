@@ -1,0 +1,116 @@
+
+============================================================
+Context around line 32:
+============================================================
+
+     24: // 3. Import Pages - Admin
+
+     25: import Dashboard from './pages/admin/Dashboard';
+
+     26: import ManageUsers from './pages/admin/ManageUsers';
+
+     27: import ManageEmployers from './pages/admin/ManageEmployers';
+
+     28: import ManageJobCategories from './pages/admin/ManageJobCategories';
+
+     29: import ManageJobs from './pages/admin/ManageJobs';
+
+     30: 
+
+     31: // 4. Import Pages - Employer (Nhà Tuyển Dụng)
+
+>>>  32: import EmployerDashboard from './pages/employer/Dashboard';
+
+     33: import JobManagement from './pages/employer/JobManagement';
+
+     34: import ApplicationManagement from './pages/employer/ApplicationManagement';
+
+     35: import InterviewManagement from './pages/employer/InterviewManagement';
+
+     36: import CompanyProfile from './pages/employer/CompanyProfile';
+
+     37: 
+
+     38: // 5. Test
+
+     39: import TestAPI from './pages/TestAPI'; 
+
+     40: 
+
+
+============================================================
+Context around line 109:
+============================================================
+
+    101:           <Route path="categories" element={<ManageJobCategories />} />
+
+    102:           <Route path="jobs" element={<ManageJobs />} />
+
+    103:         </Route>
+
+    104: 
+
+    105:         {/* =========================================
+
+    106:             NHÁNH 3: DÀNH CHO NHÀ TUYỂN DỤNG
+
+    107:         ========================================= */}
+
+    108:         <Route path="/employer" element={<EmployerLayout />}>
+
+>>> 109:           <Route index element={<EmployerDashboard />} />
+
+    110:           <Route path="dashboard" element={<EmployerDashboard />} />
+
+    111:           <Route path="jobs" element={<JobManagement />} />
+
+    112:           <Route path="applications" element={<ApplicationManagement />} />
+
+    113:           <Route path="interviews" element={<InterviewManagement />} />
+
+    114:           <Route path="company" element={<CompanyProfile />} />
+
+    115:         </Route>
+
+    116: 
+
+    117:         {/* =========================================
+
+
+============================================================
+Context around line 110:
+============================================================
+
+    102:           <Route path="jobs" element={<ManageJobs />} />
+
+    103:         </Route>
+
+    104: 
+
+    105:         {/* =========================================
+
+    106:             NHÁNH 3: DÀNH CHO NHÀ TUYỂN DỤNG
+
+    107:         ========================================= */}
+
+    108:         <Route path="/employer" element={<EmployerLayout />}>
+
+    109:           <Route index element={<EmployerDashboard />} />
+
+>>> 110:           <Route path="dashboard" element={<EmployerDashboard />} />
+
+    111:           <Route path="jobs" element={<JobManagement />} />
+
+    112:           <Route path="applications" element={<ApplicationManagement />} />
+
+    113:           <Route path="interviews" element={<InterviewManagement />} />
+
+    114:           <Route path="company" element={<CompanyProfile />} />
+
+    115:         </Route>
+
+    116: 
+
+    117:         {/* =========================================
+
+    118:             CÁC TRANG ĐỘC LẬP

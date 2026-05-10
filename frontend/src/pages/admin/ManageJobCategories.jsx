@@ -94,7 +94,7 @@ export default function ManageJobCategories() {
   const tabs = [
     { id: 'industry', title: 'Ngành nghề' },
     { id: 'skill', title: 'Kỹ năng' },
-    { id: 'location', title: 'Học vấn' }, // Demo, bạn có thể thêm Khu vực vào đây
+    { id: 'location', title: 'Học vấn' }, 
     { id: 'type', title: 'Loại hình' },
   ];
 

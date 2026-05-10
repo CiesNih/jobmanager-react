@@ -28,6 +28,13 @@ export default function AuthModal({ mode = 'login', onClose = () => {} }) {
       password: 'admin123', 
       role: 'admin', 
       name: 'Quản trị viên' 
+    },
+    { 
+      email: 'employer@example.com', 
+      password: 'employer123', 
+      role: 'employer', 
+      name: 'Công ty ABC',
+      companyName: 'Công ty Cổ phần ABC Technology'
     }
   ];
 
@@ -57,6 +64,7 @@ export default function AuthModal({ mode = 'login', onClose = () => {} }) {
         id: foundUser.email,
         name: foundUser.name,
         role: foundUser.role,
+        companyName: foundUser.companyName || '',
         token: 'fake-jwt-token-123'
       };
 
@@ -73,6 +81,8 @@ export default function AuthModal({ mode = 'login', onClose = () => {} }) {
       // Chuyển hướng người dùng dựa theo role
       if (foundUser.role === 'admin') {
         navigate('/admin');
+      } else if (foundUser.role === 'employer') {
+        navigate('/employer');
       } else {
         navigate('/');
       }
@@ -98,6 +108,24 @@ export default function AuthModal({ mode = 'login', onClose = () => {} }) {
         <button className="auth-close" onClick={onClose} aria-label="Đóng">✕</button>
 
         <h3 className="auth-title">{tab === 'login' ? 'Đăng nhập hệ thống' : 'Tạo tài khoản'}</h3>
+
+        {tab === 'login' && (
+          <div style={{ 
+            background: '#f0f7ff', 
+            padding: '12px', 
+            borderRadius: '8px', 
+            marginBottom: '15px',
+            fontSize: '13px',
+            lineHeight: '1.6'
+          }}>
+            <strong>💡 Tài khoản demo:</strong>
+            <div style={{ marginTop: '8px' }}>
+              <div>👤 <strong>Ứng viên:</strong> candidate11@example.com / 123456</div>
+              <div>🏢 <strong>Nhà tuyển dụng:</strong> employer@example.com / employer123</div>
+              <div>⚙️ <strong>Admin:</strong> admin@example.com / admin123</div>
+            </div>
+          </div>
+        )}
 
         <div className="auth-or">Hoặc đăng nhập bằng tài khoản đã có</div>
 

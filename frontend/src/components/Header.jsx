@@ -31,6 +31,25 @@ export default function Header({ onOpenAuth }) {
     navigate('/');
   };
 
+  const handleEmployerClick = (e) => {
+    e.preventDefault();
+    if (!user) {
+      // Chưa đăng nhập -> Hiển thị modal đăng nhập
+      if (onOpenAuth) {
+        onOpenAuth('login');
+      }
+    } else if (user.role === 'employer') {
+      // Đã đăng nhập với role employer -> Vào dashboard
+      navigate('/employer');
+    } else {
+      // Đã đăng nhập nhưng không phải employer
+      alert('Bạn cần đăng nhập với tài khoản Nhà tuyển dụng để truy cập trang này!');
+      if (onOpenAuth) {
+        onOpenAuth('login');
+      }
+    }
+  };
+
   return (
     <header className="header">
       <div className="header-container">
@@ -94,6 +113,16 @@ export default function Header({ onOpenAuth }) {
                       <hr className="menu-divider" />
                       <button className="menu-item logout-item" onClick={handleLogout}>Đăng xuất</button>
                     </>
+                  ) : user.role === 'employer' ? (
+                    <>
+                      <button className="menu-item" onClick={() => { setShowUserMenu(false); navigate('/employer'); }}>Dashboard Nhà tuyển dụng</button>
+                      <Link to="/employer/jobs" className="menu-item" onClick={() => setShowUserMenu(false)}>Quản lý tin tuyển dụng</Link>
+                      <Link to="/employer/applications" className="menu-item" onClick={() => setShowUserMenu(false)}>Đơn ứng tuyển</Link>
+                      <Link to="/employer/interviews" className="menu-item" onClick={() => setShowUserMenu(false)}>Lịch phỏng vấn</Link>
+                      <Link to="/employer/company" className="menu-item" onClick={() => setShowUserMenu(false)}>Thông tin công ty</Link>
+                      <hr className="menu-divider" />
+                      <button className="menu-item logout-item" onClick={handleLogout}>Đăng xuất</button>
+                    </>
                   ) : (
                     <>
                       <Link to="/profile" className="menu-item" onClick={() => setShowUserMenu(false)}>Quản lý hồ sơ</Link>
@@ -110,7 +139,12 @@ export default function Header({ onOpenAuth }) {
             </div>
           )}
 
-          <Link to="/employer" className="btn-employer">NHÀ TUYỂN DỤNG</Link>
+          <button 
+            onClick={handleEmployerClick}
+            className="btn-employer"
+          >
+            NHÀ TUYỂN DỤNG
+          </button>
         </div>
       </div>
     </header>
