@@ -67,27 +67,40 @@
 /* Job cards (wider, spaced like image) */
 .joblist-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 
 .joblist-card {
   display: flex;
-  gap: 18px;
-  align-items: center;
-  padding: 18px;
+  gap: 15px;
+  align-items: flex-start;
+  padding: 20px;
   border-radius: 12px;
   background: #fff;
-  border: 1px solid #eef3fa;
-  box-shadow: 0 6px 18px rgba(15,23,42,0.04);
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.joblist-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border-color: #1e73d9;
 }
 
 .joblist-card .company-logo.large {
-  width: 64px;
-  height: 64px;
+  width: 80px;
+  height: 80px;
   border-radius: 12px;
-  font-size: 22px;
-  display:flex;align-items:center;justify-content:center;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 700;
+  flex-shrink: 0;
 }
 /* --- Container chính của toàn bộ bộ lọc --- */
 /* Container bọc các ô lọc - Làm gọn lại */
@@ -182,26 +195,119 @@
 }
 
 /* layout columns inside card */
-.card-left { width: 80px; flex-shrink:0; }
-.card-center { flex: 1; }
-.card-right { width: 140px; display:flex;align-items:center;justify-content:flex-end; }
+.card-left { 
+  flex-shrink: 0; 
+}
+.card-center { 
+  flex: 1; 
+  min-width: 0;
+}
+.card-right { 
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
 
 /* meta */
-.job-title { margin: 0 0 6px 0; color: #d32f2f; font-size: 18px; }
-.company-name { margin:0 0 8px 0; color:#666; }
-.meta-row { display:flex; gap:12px; color:#4b5563; font-size:13px; }
+.job-title { 
+  margin: 0 0 8px 0; 
+  color: #d32f2f; 
+  font-size: 16px; 
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.job-title:hover {
+  color: #b71c1c;
+  text-decoration: underline;
+}
+
+.company-name { 
+  margin: 0 0 12px 0; 
+  color: #999;
+  font-size: 14px;
+}
+
+.job-meta-info {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.meta-salary {
+  color: #1e73d9;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.meta-location {
+  color: #1e73d9;
+  font-size: 14px;
+}
+
+.job-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.job-tags .tag {
+  background: #f0f0f0;
+  color: #666;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* Favorite button */
+.btn-favorite-job {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #ddd;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-favorite-job:hover {
+  color: #1e73d9;
+  transform: scale(1.2);
+}
+
+.btn-favorite-job.active {
+  color: #1e73d9;
+}
 
 /* Apply button on right */
-.btn-apply { background: linear-gradient(180deg,#1e73d9,#0f56b8); color:#fff; border:none; padding:10px 14px; border-radius:8px; font-weight:700; cursor:pointer; }
+.btn-apply { 
+  background: linear-gradient(180deg,#1e73d9,#0f56b8); 
+  color:#fff; 
+  border:none; 
+  padding:10px 14px; 
+  border-radius:8px; 
+  font-weight:700; 
+  cursor:pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-apply:hover {
+  background: linear-gradient(180deg, #0f56b8, #0a3d7a);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(30, 115, 217, 0.3);
+}
 
 /* Responsive */
 @media (min-width: 980px) {
   .results-container { display:flex; gap:30px; align-items:flex-start; max-width:1120px; margin:0 auto; }
-  .joblist-grid { grid-template-columns: 1fr; }
   aside.sidebar { width: 300px; flex-shrink: 0; }
 }
 @media (max-width: 980px) {
   .joblist-search { flex-direction: column; align-items: stretch; }
   .joblist-filters { overflow:auto; padding-bottom:8px; }
-  .card-right { justify-content:flex-start; width: auto; }
+  .joblist-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .joblist-grid { grid-template-columns: 1fr; }
 }

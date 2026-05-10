@@ -107,6 +107,14 @@
   color: #ffffff !important;
   font-size: 12px;
   font-weight: bold;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-employer:hover {
+  background-color: #1a1a1a;
 }
 
 .nav-item {

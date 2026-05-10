@@ -221,7 +221,12 @@ export default function JobListPage() {
             {!loading && paginated.length > 0 && (
               <div className="jobs-grid joblist-grid">
                 {paginated.map(job => (
-                  <div key={job.maViecLam} className="job-card joblist-card">
+                  <div 
+                    key={job.maViecLam} 
+                    className="job-card joblist-card"
+                    onClick={() => navigate(`/jobs/${job.maViecLam}`)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     <div className="card-left">
                       <div className="company-logo large">
                         <span>{(job.tieuDe || '').charAt(0).toUpperCase()}</span>
@@ -229,16 +234,36 @@ export default function JobListPage() {
                     </div>
 
                     <div className="card-center">
-                      <h3 className="job-title">{job.tieuDe}</h3>
+                      <h3 className="job-title">
+                        {job.tieuDe}
+                      </h3>
                       <p className="company-name">{job.tenCongTy}</p>
-                      <div className="meta-row">
-                        <span className="meta-item">{job.luongToiThieu ? `${job.luongToiThieu.toLocaleString()} - ${job.luongToiDa?.toLocaleString()} VNĐ` : 'Thỏa thuận'}</span>
-                        <span className="meta-item">{job.diaDiem || 'N/A'}</span>
+                      
+                      <div className="job-meta-info">
+                        <span className="meta-salary">
+                          {job.luongToiThieu ? `${job.luongToiThieu.toLocaleString()} - ${job.luongToiDa?.toLocaleString()} VNĐ` : 'Thỏa thuận'}
+                        </span>
+                        <span className="meta-location">{job.diaDiem || 'Bình Dương'}</span>
+                      </div>
+
+                      <div className="job-tags">
+                        <span className="tag">{job.loaiHinhCongViec || 'Full-time'}</span>
+                        <span className="tag">Không yêu cầu</span>
+                        <span className="tag">16 phút trước</span>
                       </div>
                     </div>
 
                     <div className="card-right">
-                      <button className="btn-apply" onClick={() => navigate(`/jobs/${job.maViecLam}`)}>Xem Chi Tiết</button>
+                      <button 
+                        className="btn-favorite-job"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent card click
+                          // TODO: Add favorite logic here
+                          console.log('Favorite clicked:', job.maViecLam);
+                        }}
+                      >
+                        ♡
+                      </button>
                     </div>
                   </div>
                 ))}

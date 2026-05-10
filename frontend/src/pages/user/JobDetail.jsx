@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../styles/JobDetail.css';
@@ -8,6 +8,8 @@ export default function JobDetail() {
   const navigate = useNavigate();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [hasApplied, setHasApplied] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     const fetchAndFilterJob = async () => {
@@ -15,7 +17,9 @@ export default function JobDetail() {
         const res = await axios.get(`https://localhost:7122/api/ViecLam/`);
         const foundJob = res.data.find(item => item.maViecLam === id);
         if (foundJob) {
-          setJob(foundJob); 
+          setJob(foundJob);
+          checkIfApplied(foundJob.maViecLam);
+          checkIfSaved(foundJob.maViecLam);
         } else {
           console.error("Không tìm thấy công việc với ID này");
         }
@@ -30,6 +34,93 @@ export default function JobDetail() {
       fetchAndFilterJob();
     }
   }, [id]);
+
+  const checkIfApplied = (jobId) => {
+    const appliedJobs = JSON.parse(localStorage.getItem('appliedJobs') || '[]');
+    const applied = appliedJobs.some(job => job.maViecLam === jobId);
+    setHasApplied(applied);
+  };
+
+  const checkIfSaved = (jobId) => {
+    const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+    const saved = savedJobs.some(job => job.maViecLam === jobId);
+    setIsSaved(saved);
+  };
+
+  const handleSaveJob = () => {
+    // Check if user is logged in
+    const savedUser = localStorage.getItem('authUser') || sessionStorage.getItem('authUser');
+    if (!savedUser) {
+      alert('Vui lòng đăng nhập để lưu việc làm!');
+      navigate('/');
+      return;
+    }
+
+    // Get existing saved jobs
+    const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+    
+    if (isSaved) {
+      // Remove from saved
+      const updatedJobs = savedJobs.filter(j => j.maViecLam !== job.maViecLam);
+      localStorage.setItem('savedJobs', JSON.stringify(updatedJobs));
+      setIsSaved(false);
+      alert('Đã bỏ lưu việc làm này!');
+    } else {
+      // Add to saved
+      const savedJob = {
+        ...job,
+        savedAt: new Date().toISOString()
+      };
+      savedJobs.push(savedJob);
+      localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
+      setIsSaved(true);
+      alert('✅ Đã lưu việc làm! Bạn có thể xem trong "Việc làm đã lưu".');
+    }
+  };
+
+  const handleApply = () => {
+    // Check if user is logged in
+    const savedUser = localStorage.getItem('authUser') || sessionStorage.getItem('authUser');
+    if (!savedUser) {
+      alert('Vui lòng đăng nhập để ứng tuyển!');
+      navigate('/');
+      return;
+    }
+
+    if (hasApplied) {
+      alert('Bạn đã ứng tuyển công việc này rồi!');
+      return;
+    }
+
+    const user = JSON.parse(savedUser);
+
+    // Get existing applied jobs
+    const appliedJobs = JSON.parse(localStorage.getItem('appliedJobs') || '[]');
+    
+    // Create application object with full candidate info
+    const application = {
+      ...job,
+      applicationId: `APP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      appliedAt: new Date().toISOString(),
+      status: 'pending', // pending, approved, rejected
+      userId: user.id || user.email,
+      candidateName: user.name || 'Ứng viên',
+      candidateEmail: user.email || user.id,
+      candidatePhone: user.phone || '0123456789',
+      experience: '2 năm', // Có thể lấy từ profile
+      education: 'Đại học', // Có thể lấy từ profile
+      coverLetter: `Tôi rất quan tâm đến vị trí ${job.tieuDe} tại ${job.tenCongTy}. Tôi tin rằng với kinh nghiệm và kỹ năng của mình, tôi có thể đóng góp tích cực cho công ty.`
+    };
+
+    // Add to array
+    appliedJobs.push(application);
+    
+    // Save to localStorage
+    localStorage.setItem('appliedJobs', JSON.stringify(appliedJobs));
+    
+    setHasApplied(true);
+    alert('✅ Ứng tuyển thành công! Bạn có thể xem trong "Việc làm đã ứng tuyển".');
+  };
 
   if (loading) return <div className="loading-container">Đang tải dữ liệu công việc...</div>;
   if (!job) return <div className="error-container">Không tìm thấy công việc này hoặc đã hết hạn tuyển dụng.</div>;
@@ -73,9 +164,21 @@ export default function JobDetail() {
           <p className="deadline-text">Hạn nộp hồ sơ: <strong>{new Date(job.ngayDang).toLocaleDateString()}</strong> (Cập nhật dữ liệu thật từ ngayDang)</p>
           
           <div className="action-buttons-group">
-            <button className="btn-apply-large">ỨNG TUYỂN NGAY</button>
+            <button 
+              className={`btn-apply-large ${hasApplied ? 'applied' : ''}`}
+              onClick={handleApply}
+              disabled={hasApplied}
+            >
+              {hasApplied ? '✓ ĐÃ ỨNG TUYỂN' : 'ỨNG TUYỂN NGAY'}
+            </button>
             <button className="btn-chat-detail">Chat với NTD</button>
-            <button className="btn-icon-detail heart-icon">♡</button>
+            <button 
+              className={`btn-icon-detail heart-icon ${isSaved ? 'saved' : ''}`}
+              onClick={handleSaveJob}
+              title={isSaved ? 'Bỏ lưu' : 'Lưu việc làm'}
+            >
+              {isSaved ? '♥' : '♡'}
+            </button>
             <button className="btn-icon-detail share-icon">🔗</button>
           </div>
         </div>

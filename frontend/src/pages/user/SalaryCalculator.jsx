@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import SalarySidebar from '../../components/SalarySidebar';
 import '../../styles/SalaryCalculator.css';
 
@@ -135,77 +135,235 @@ export default function SalaryCalculator() {
   };
 
   return (
-    <div className="salary-container">
-      <main className="salary-main">
-        <h2>Máy tính Lương (Gross ↔ Net)</h2>
+    <div className="salary-page">
+      <div className="salary-container">
+        <main className="salary-main">
+          <div className="salary-header">
+            <h1>💰 Máy tính Lương GROSS - NET</h1>
+            <p>Tính toán lương thực lĩnh chính xác theo quy định mới nhất</p>
+          </div>
 
-        <div className="calc-controls">
-          <div className="row">
-            <label>Đơn vị tiền tệ:</label>
-            <div className="radio-group">
-              <label><input type="radio" checked={currency === 'VND'} onChange={() => setCurrency('VND')} /> VND</label>
-              <label><input type="radio" checked={currency === 'USD'} onChange={() => setCurrency('USD')} /> USD</label>
+          <div className="calc-controls">
+            {/* Currency Selection */}
+            <div className="control-group">
+              <label className="control-label">
+                <span className="label-icon">💱</span>
+                Đơn vị tiền tệ
+              </label>
+              <div className="radio-group">
+                <label className={`radio-option ${currency === 'VND' ? 'active' : ''}`}>
+                  <input 
+                    type="radio" 
+                    checked={currency === 'VND'} 
+                    onChange={() => setCurrency('VND')} 
+                  />
+                  <span>VND (₫)</span>
+                </label>
+                <label className={`radio-option ${currency === 'USD' ? 'active' : ''}`}>
+                  <input 
+                    type="radio" 
+                    checked={currency === 'USD'} 
+                    onChange={() => setCurrency('USD')} 
+                  />
+                  <span>USD ($)</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Mode Selection */}
+            <div className="control-group">
+              <label className="control-label">
+                <span className="label-icon">🔄</span>
+                Chế độ tính
+              </label>
+              <div className="mode-buttons">
+                <button 
+                  className={`mode-btn ${mode === 'gross' ? 'active' : ''}`} 
+                  onClick={() => setMode('gross')}
+                >
+                  <span className="mode-icon">→</span>
+                  GROSS → NET
+                </button>
+                <button 
+                  className={`mode-btn ${mode === 'net' ? 'active' : ''}`} 
+                  onClick={() => setMode('net')}
+                >
+                  <span className="mode-icon">←</span>
+                  NET → GROSS
+                </button>
+              </div>
+            </div>
+
+            {/* Amount Input */}
+            <div className="control-group">
+              <label className="control-label">
+                <span className="label-icon">💵</span>
+                {mode === 'gross' ? 'Lương Gross (tháng)' : 'Lương Net (tháng)'}
+              </label>
+              <div className="input-wrapper">
+                <input 
+                  type="number" 
+                  value={amount} 
+                  onChange={(e) => setAmount(e.target.value)} 
+                  className="input-field" 
+                  placeholder={currency === 'VND' ? 'VD: 20000000' : 'VD: 1000'}
+                />
+                <span className="input-suffix">{currency === 'VND' ? 'đ' : '$'}</span>
+              </div>
+            </div>
+
+            {/* Additional Options */}
+            <div className="control-row">
+              <div className="control-group half">
+                <label className="control-label">
+                  <span className="label-icon">👨‍👩‍👧‍👦</span>
+                  Người phụ thuộc
+                </label>
+                <input 
+                  type="number" 
+                  min="0" 
+                  max="20" 
+                  value={dependents} 
+                  onChange={(e) => setDependents(e.target.value)} 
+                  className="input-field"
+                />
+              </div>
+
+              <div className="control-group half">
+                <label className="control-label">
+                  <span className="label-icon">📍</span>
+                  Vùng
+                </label>
+                <select 
+                  value={region} 
+                  onChange={(e) => setRegion(e.target.value)} 
+                  className="input-field"
+                >
+                  <option value="I">Vùng I (HN, HCM...)</option>
+                  <option value="II">Vùng II</option>
+                  <option value="III">Vùng III</option>
+                  <option value="IV">Vùng IV</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Tax Method */}
+            <div className="control-group">
+              <label className="control-label">
+                <span className="label-icon">📊</span>
+                Phương pháp tính thuế
+              </label>
+              <select 
+                value={method} 
+                onChange={(e) => setMethod(e.target.value)} 
+                className="input-field"
+              >
+                <option value="progressive">Thuế lũy tiến từng phần (Khuyến nghị)</option>
+                <option value="flat10">Thuế suất cố định 10%</option>
+              </select>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="action-buttons">
+              <button onClick={handleCalculate} className="btn btn-primary">
+                <span>🧮</span> Tính toán
+              </button>
+              <button onClick={handleReset} className="btn btn-secondary">
+                <span>🔄</span> Làm mới
+              </button>
             </div>
           </div>
 
-          <div className="row">
-            <label>Chế độ tính:</label>
-            <div className="mode-buttons">
-              <button className={mode === 'gross' ? 'active' : ''} onClick={() => setMode('gross')}>GROSS → NET</button>
-              <button className={mode === 'net' ? 'active' : ''} onClick={() => setMode('net')}>NET → GROSS</button>
-            </div>
-          </div>
-
-          <div className="row">
-            <label>{mode === 'gross' ? 'Nhập lương Gross (tháng):' : 'Nhập lương Net (tháng):'}</label>
-            <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="input" placeholder="VD: 20000000" />
-          </div>
-
-          <div className="row small">
-            <label>Số người phụ thuộc:</label>
-            <input type="number" min="0" max="20" value={dependents} onChange={(e) => setDependents(e.target.value)} className="input small-input" />
+          {/* Results */}
+          <div className="result-block">
+            <h3 className="result-title">
+              <span className="result-icon">📈</span>
+              Kết quả tính toán
+            </h3>
             
-            <label>Phương pháp tính thuế:</label>
-            <select value={method} onChange={(e) => setMethod(e.target.value)} className="input small-input">
-              <option value="progressive">Thuế lũy tiến từng phần</option>
-              <option value="flat10">Thuế suất cố định 10%</option>
-            </select>
+            {!result && (
+              <div className="result-empty">
+                <div className="empty-icon">📊</div>
+                <p>Nhập thông tin và nhấn "Tính toán" để xem kết quả chi tiết</p>
+              </div>
+            )}
+            
+            {result && (
+              <div className="result-content">
+                <div className="result-item highlight">
+                  <span className="result-label">
+                    <span className="label-dot gross"></span>
+                    Lương Gross (tổng)
+                  </span>
+                  <span className="result-value">{formatValue(result.gross, currency)}</span>
+                </div>
+
+                <div className="result-breakdown">
+                  <div className="breakdown-title">Các khoản khấu trừ:</div>
+                  
+                  <div className="result-item deduction">
+                    <span className="result-label">
+                      <span className="deduction-icon">−</span>
+                      Bảo hiểm (BHXH 8% + BHYT 1.5% + BHTN 1%)
+                    </span>
+                    <span className="result-value negative">{formatValue(result.insurance, currency)}</span>
+                  </div>
+
+                  <div className="result-item info">
+                    <span className="result-label">
+                      <span className="info-icon">→</span>
+                      Thu nhập tính thuế
+                    </span>
+                    <span className="result-value">{formatValue(result.taxableMonthly, currency)}</span>
+                  </div>
+
+                  <div className="result-item deduction">
+                    <span className="result-label">
+                      <span className="deduction-icon">−</span>
+                      Thuế TNCN
+                    </span>
+                    <span className="result-value negative">{formatValue(result.taxMonthly, currency)}</span>
+                  </div>
+                </div>
+
+                <div className="result-divider"></div>
+
+                <div className="result-item final">
+                  <span className="result-label">
+                    <span className="label-dot net"></span>
+                    Lương thực lĩnh (Net)
+                  </span>
+                  <span className="result-value final-value">{formatValue(result.net, currency)}</span>
+                </div>
+
+                {/* Summary Card */}
+                <div className="result-summary">
+                  <div className="summary-item">
+                    <div className="summary-label">Tổng khấu trừ</div>
+                    <div className="summary-value">{formatValue(result.insurance + result.taxMonthly, currency)}</div>
+                  </div>
+                  <div className="summary-item">
+                    <div className="summary-label">Tỷ lệ khấu trừ</div>
+                    <div className="summary-value">
+                      {((result.insurance + result.taxMonthly) / result.gross * 100).toFixed(1)}%
+                    </div>
+                  </div>
+                  <div className="summary-item">
+                    <div className="summary-label">Tỷ lệ thực lĩnh</div>
+                    <div className="summary-value success">
+                      {(result.net / result.gross * 100).toFixed(1)}%
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
+        </main>
 
-          <div className="row small">
-            <label>Vùng:</label>
-            <select value={region} onChange={(e) => setRegion(e.target.value)} className="input small-input">
-              <option value="I">Vùng I (Hà Nội, TP.HCM...)</option>
-              <option value="II">Vùng II</option>
-              <option value="III">Vùng III</option>
-              <option value="IV">Vùng IV</option>
-            </select>
-            <div className="spacer" style={{ flex: 1 }} />
-            <button onClick={handleCalculate} className="btn primary">Tính</button>
-            <button onClick={handleReset} className="btn">Làm mới</button>
-          </div>
-        </div>
-
-        <div className="result-block">
-          <h3>Kết quả</h3>
-          {!result && <div className="hint">Nhập số và bấm "Tính" để xem kết quả.</div>}
-          {result && (
-            <div className="result-grid">
-              <div className="result-row"><strong>Gross (tính trên):</strong> <span>{formatValue(result.gross, currency)}</span></div>
-              <div className="result-row"><strong>Bảo hiểm (BHXH 8%, BHYT 1.5%, BHTN 1%):</strong> <span style={{ color: '#d9534f' }}>- {formatValue(result.insurance, currency)}</span></div>
-              <div className="result-row"><strong>Thu nhập tính thuế (tháng):</strong> <span>{formatValue(result.taxableMonthly, currency)}</span></div>
-              <div className="result-row"><strong>Thuế TNCN (tháng):</strong> <span style={{ color: '#d9534f' }}>- {formatValue(result.taxMonthly, currency)}</span></div>
-              <hr style={{ margin: '15px 0', borderColor: '#eee' }} />
-              <div className="result-row total" style={{ fontSize: '18px', color: '#00a65a' }}><strong>Lương thực lĩnh (Net):</strong> <strong>{formatValue(result.net, currency)}</strong></div>
-            </div>
-          )}
-        </div>
-      </main>
-
-      
-      <aside className="salary-sidebar">
-        <SalarySidebar />
-      </aside>
+        <aside className="salary-sidebar">
+          <SalarySidebar />
+        </aside>
+      </div>
     </div>
   );
 }

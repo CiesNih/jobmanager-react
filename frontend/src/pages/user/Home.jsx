@@ -6,6 +6,7 @@ import Sidebar from '../../components/Sidebar';
 import '../../styles/Home.css';
 
 
+
 export default function Home() {
   const navigate = useNavigate();
   const [keyword, setKeyword] = useState('');
@@ -20,11 +21,18 @@ export default function Home() {
 
   useEffect(() => {
     fetchJobs();
+    loadFavorites();
   }, []);
 
   useEffect(() => {
     filterJobs();
   }, [jobs]);
+
+  const loadFavorites = () => {
+    const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+    const favoriteIds = savedJobs.map(job => job.maViecLam);
+    setFavorites(favoriteIds);
+  };
 
   const fetchJobs = async () => {
     try {
@@ -64,10 +72,34 @@ export default function Home() {
     filterJobs();
   };
 
-  const toggleFavorite = (id) => {
-    setFavorites(prev =>
-      prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]
-    );
+  const toggleFavorite = (job) => {
+    // Check if user is logged in
+    const savedUser = localStorage.getItem('authUser') || sessionStorage.getItem('authUser');
+    if (!savedUser) {
+      alert('Vui lòng đăng nhập để lưu việc làm!');
+      return;
+    }
+
+    const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+    const isSaved = savedJobs.some(j => j.maViecLam === job.maViecLam);
+    
+    if (isSaved) {
+      // Remove from saved
+      const updatedJobs = savedJobs.filter(j => j.maViecLam !== job.maViecLam);
+      localStorage.setItem('savedJobs', JSON.stringify(updatedJobs));
+      setFavorites(prev => prev.filter(id => id !== job.maViecLam));
+      alert('Đã bỏ lưu việc làm này!');
+    } else {
+      // Add to saved
+      const savedJob = {
+        ...job,
+        savedAt: new Date().toISOString()
+      };
+      savedJobs.push(savedJob);
+      localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
+      setFavorites(prev => [...prev, job.maViecLam]);
+      alert('✅ Đã lưu việc làm!');
+    }
   };
 
   const paginatedJobs = filteredJobs.slice(
@@ -186,14 +218,14 @@ export default function Home() {
                         <span>{job.tieuDe?.charAt(0).toUpperCase()}</span>
                       </div>
                       <div className="card-header-content">
-                        <h3 className="job-title" style={{ color: '#d32f2f' }}>{job.tieuDe}</h3>
+                        <h3 className="job-title">{job.tieuDe}</h3>
                         <p className="company-name">{job.tenCongTy}</p>
                       </div>
                       <button
                        className={`btn-favorite ${favorites.includes(job.maViecLam) ? 'active' : ''}`}
-                       onClick={() => toggleFavorite(job.maViecLam)}
+                       onClick={() => toggleFavorite(job)}
                      >
-                      ♡
+                      {favorites.includes(job.maViecLam) ? '♥' : '♡'}
                       </button>
                       </div>
                       {/* Card Body */}
