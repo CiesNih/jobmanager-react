@@ -45,10 +45,10 @@ export default function AuthModal({ mode = 'login', onClose = () => {} }) {
     setLoading(true);
 
     try {
-      // Giả lập thời gian chờ của mạng (delay 800ms) cho chân thực
-      await new Promise(resolve => setTimeout(resolve, 800));
+      // Giả lập thời gian chờ
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      // Kiểm tra tài khoản
+      // Kiểm tra tài khoản static
       const foundUser = staticUsers.find(
         (u) => u.email === email && u.password === password
       );
@@ -59,26 +59,27 @@ export default function AuthModal({ mode = 'login', onClose = () => {} }) {
         return;
       }
 
-      // Đăng nhập thành công: Lưu thông tin vào localStorage để App nhận diện
+      // Lưu thông tin user (không cần token thật vì đã tắt auth)
       const userSession = {
         id: foundUser.email,
+        email: foundUser.email,
         name: foundUser.name,
         role: foundUser.role,
         companyName: foundUser.companyName || '',
-        token: 'fake-jwt-token-123'
+        token: 'fake-token-for-testing' // Fake token
       };
 
       if (remember) {
         localStorage.setItem('authUser', JSON.stringify(userSession));
       } else {
-        sessionStorage.setItem('authUser', JSON.stringify(userSession)); // Tắt trình duyệt là mất
+        sessionStorage.setItem('authUser', JSON.stringify(userSession));
       }
       window.dispatchEvent(new Event('authChange'));
 
-      // Đóng modal trước
+      // Đóng modal
       if (onClose) onClose();
 
-      // Chuyển hướng người dùng dựa theo role
+      // Chuyển hướng theo role
       if (foundUser.role === 'admin') {
         navigate('/admin');
       } else if (foundUser.role === 'employer') {
@@ -88,7 +89,7 @@ export default function AuthModal({ mode = 'login', onClose = () => {} }) {
       }
 
     } catch (err) {
-      console.error('Lỗi logic:', err);
+      console.error('Lỗi đăng nhập:', err);
       setError('Có lỗi xảy ra. Vui lòng thử lại.');
     } finally {
       setLoading(false);

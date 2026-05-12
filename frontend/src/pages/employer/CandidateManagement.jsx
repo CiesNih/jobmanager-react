@@ -161,19 +161,14 @@ export default function CandidateManagement() {
 
   return (
     <div>
-      <h2 style={{ fontWeight: 400, color: '#333', marginTop: 0 }}>
-        Quản lý Ứng viên <small style={{ fontSize: '14px', color: '#777' }}>Danh sách đơn ứng tuyển</small>
-      </h2>
-
-      {/* Debug & Reset Button */}
-      <div >
+      <h2 style={{ fontWeight: 400, color: '#333', marginTop: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span>
+          Quản lý Ứng viên <small style={{ fontSize: '14px', color: '#777' }}>Danh sách đơn ứng tuyển</small>
+        </span>
         <button
           onClick={() => {
             if (window.confirm('Xóa tất cả dữ liệu ứng tuyển cũ và tạo dữ liệu mẫu?')) {
-              // Xóa dữ liệu cũ
               localStorage.removeItem('appliedJobs');
-              
-              // Tạo dữ liệu mẫu với status đúng
               const sampleData = [
                 {
                   applicationId: 'APP-001',
@@ -210,30 +205,28 @@ export default function CandidateManagement() {
                   appliedAt: new Date().toISOString()
                 }
               ];
-              
               localStorage.setItem('appliedJobs', JSON.stringify(sampleData));
-              
-              // Reload trang
               window.location.reload();
             }
           }}
           style={{
             padding: '8px 16px',
-            background: '#ffc107',
+            background: '#1e73d9',
             border: 'none',
             borderRadius: '4px',
             cursor: 'pointer',
-            fontWeight: 'bold',
-            color: '#000'
+            fontWeight: '500',
+            color: '#fff',
+            fontSize: '14px'
           }}
         >
-           Làm mới
+          🔄 Làm mới
         </button>
-      </div>
+      </h2>
 
       {/* Stats Cards */}
       <div className="dashboard-grid" style={{ marginBottom: '30px' }}>
-        <div className="stat-card bg-info">
+        <div className="stat-card bg-info" style={{ background: '#0078a3' }}>
           <div className="inner" style={{ color: '#fff' }}>
             <h3 style={{ color: '#fff', fontSize: '38px', fontWeight: 'bold', margin: '0 0 10px 0' }}>
               {stats.total}
@@ -245,7 +238,7 @@ export default function CandidateManagement() {
           <div className="icon">📋</div>
         </div>
 
-        <div className="stat-card bg-warning">
+        <div className="stat-card bg-warning" style={{ background: '#f39c12' }}>
           <div className="inner" style={{ color: '#fff' }}>
             <h3 style={{ color: '#fff', fontSize: '38px', fontWeight: 'bold', margin: '0 0 10px 0' }}>
               {stats.pending}
@@ -257,7 +250,7 @@ export default function CandidateManagement() {
           <div className="icon">⏳</div>
         </div>
 
-        <div className="stat-card bg-success">
+        <div className="stat-card bg-success" style={{ background: '#00a65a' }}>
           <div className="inner" style={{ color: '#fff' }}>
             <h3 style={{ color: '#fff', fontSize: '38px', fontWeight: 'bold', margin: '0 0 10px 0' }}>
               {stats.approved}
@@ -269,7 +262,7 @@ export default function CandidateManagement() {
           <div className="icon">✅</div>
         </div>
 
-        <div className="stat-card bg-danger">
+        <div className="stat-card bg-danger" style={{ background: '#dd4b39' }}>
           <div className="inner" style={{ color: '#fff' }}>
             <h3 style={{ color: '#fff', fontSize: '38px', fontWeight: 'bold', margin: '0 0 10px 0' }}>
               {stats.rejected}

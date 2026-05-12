@@ -25,10 +25,10 @@ export default function Footer() {
         <div className="footer-column">
           <h3>Dành Cho Ứng Viên</h3>
           <ul>
-            <li><Link to="/">Tìm việc làm</Link></li>
-            <li><Link to="/candidates">Danh sách ứng viên</Link></li>
-            <li><Link to="#">Cẩm nang nghề nghiệp</Link></li>
-            <li><Link to="#">Tạo CV chuyên nghiệp</Link></li>
+            <li><Link to="/jobs">Tìm việc làm</Link></li>
+            <li><Link to="/tools/create-cv">Tạo CV chuyên nghiệp</Link></li>
+            <li><Link to="/blog">Cẩm nang nghề nghiệp</Link></li>
+            <li><Link to="/tools/career-guidance">Hướng nghiệp</Link></li>
           </ul>
         </div>
 
@@ -36,9 +36,9 @@ export default function Footer() {
         <div className="footer-column">
           <h3>Nhà Tuyển Dụng</h3>
           <ul>
-            <li><Link to="#">Đăng tin tuyển dụng</Link></li>
-            <li><Link to="#">Tìm kiếm hồ sơ</Link></li>
-            <li><Link to="#">Sản phẩm dịch vụ</Link></li>
+            <li><Link to="/employer">Đăng tin tuyển dụng</Link></li>
+            <li><Link to="/employer/candidates">Tìm kiếm ứng viên</Link></li>
+            <li><Link to="/companies">Danh sách công ty</Link></li>
             <li><Link to="/test-api">Hệ thống API</Link></li>
           </ul>
         </div>

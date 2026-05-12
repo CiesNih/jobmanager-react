@@ -19,6 +19,7 @@ import CreateCV from './pages/user/CreateCV';
 import Profile from './pages/user/Profile';
 import AppliedJobs from './pages/user/AppliedJobs';
 import SavedJobs from './pages/user/SavedJobs';
+import Notifications from './pages/user/Notifications';
 import CareerHandbook from './pages/user/CareerHandbook';
 import BlogDetail from './pages/user/BlogDetail';
 
@@ -91,6 +92,7 @@ function AppContent() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/applied-jobs" element={<AppliedJobs />} />
           <Route path="/saved-jobs" element={<SavedJobs />} />
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/blog" element={<CareerHandbook />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
         </Route>

@@ -2,7 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import '../../styles/admin.css';
 
-const API_URL = import.meta.env.VITE_API_BASE ? `${import.meta.env.VITE_API_BASE}/api/NguoiDung` : 'https://localhost:7272/api/NguoiDung';
+const API_URL = import.meta.env.VITE_API_ADMIN ? `${import.meta.env.VITE_API_ADMIN}/api/NguoiDung` : 'https://localhost:7272/api/NguoiDung';
+
+const getAuthToken = () => {
+  const savedUser = localStorage.getItem('authUser') || sessionStorage.getItem('authUser');
+  if (savedUser) {
+    try {
+      const user = JSON.parse(savedUser);
+      return user.token || null;
+    } catch {
+      return null;
+    }
+  }
+  return null;
+};
+
+const getHeaders = () => {
+  const headers = { 'Content-Type': 'application/json' };
+  const token = getAuthToken();
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
+};
 
 const ROLE_MAP = {
   1: 'Admin',
@@ -89,14 +111,39 @@ const ManageUsers = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await fetch(API_URL);
-      if (!res.ok) throw new Error('Lỗi khi tải dữ liệu');
+      console.log('🔍 Fetching users from:', API_URL);
+      console.log('🔑 Token:', getAuthToken() ? 'Có token' : 'Không có token');
+      
+      const res = await fetch(API_URL, {
+        headers: getHeaders()
+      });
+      
+      console.log('📡 Response status:', res.status);
+      
+      // Nếu 401, nghĩa là chưa đăng nhập hoặc token hết hạn
+      if (res.status === 401) {
+        console.error('❌ 401 Unauthorized - Token không hợp lệ');
+        alert('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+        window.location.href = '/';
+        return;
+      }
+      
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('❌ API Error:', errorText);
+        throw new Error('Lỗi khi tải dữ liệu');
+      }
+      
       const data = await res.json();
+      console.log('✅ Data received:', data);
+      
       const list = Array.isArray(data) ? data.map(normalizeUser) : [];
+      console.log('✅ Normalized users:', list.length, 'users');
+      
       setUsers(list);
     } catch (err) {
-      console.error(err);
-      alert('Không thể tải danh sách người dùng!');
+      console.error('❌ Fetch error:', err);
+      alert('Không thể tải danh sách người dùng! Chi tiết: ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -163,7 +210,10 @@ const ManageUsers = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Bạn có chắc chắn muốn xóa người dùng này?')) return;
     try {
-      const response = await fetch(`${API_URL}/${encodeURIComponent(id)}`, { method: 'DELETE' });
+      const response = await fetch(`${API_URL}/${encodeURIComponent(id)}`, { 
+        method: 'DELETE',
+        headers: getHeaders()
+      });
       if (!response.ok) throw new Error('Xóa thất bại');
       alert('Xóa thành công');
       fetchUsers();
@@ -195,7 +245,7 @@ const ManageUsers = () => {
 
   //  { dto: payload }
   const sendWithOptionalWrapper = async (url, method, body) => {
-    const opts = { method, headers: { 'Content-Type': 'application/json' } };
+    const opts = { method, headers: getHeaders() };
     let res = await fetch(url, { ...opts, body: JSON.stringify(body) });
     if (res.ok) return res;
 

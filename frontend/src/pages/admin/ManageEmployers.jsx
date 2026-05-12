@@ -21,7 +21,7 @@ export default function ManageEmployers() {
     taoBoi: ''
   });
 
-  const API_BASE = import.meta.env.VITE_API_BASE || 'https://localhost:7272';
+  const API_BASE = import.meta.env.VITE_API_ADMIN || 'https://localhost:7272';
 
   // ==========================================
   // 1. GET: Lấy danh sách công ty

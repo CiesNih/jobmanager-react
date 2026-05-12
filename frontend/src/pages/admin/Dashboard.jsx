@@ -5,11 +5,19 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import '../../styles/admin.css';
 
 const StatCard = ({ number, title, bgColor, icon, linkTo }) => {
+  // Map màu nền cho từng loại card
+  const colorMap = {
+    'bg-orange': '#f39c12',
+    'bg-green': '#00a65a',
+    'bg-blue': '#0078a3',
+    'bg-red': '#dd4b39'
+  };
+
   return (
-    <div className={`stat-card ${bgColor}`}>
-      <div className="inner">
-        <h3>{number}</h3>
-        <p>{title}</p>
+    <div className={`stat-card ${bgColor}`} style={{ background: colorMap[bgColor] || '#3c8dbc' }}>
+      <div className="inner" style={{ color: '#fff' }}>
+        <h3 style={{ color: '#fff' }}>{number}</h3>
+        <p style={{ color: '#fff' }}>{title}</p>
       </div>
       <div className="icon">{icon}</div>
       <Link to={linkTo} className="stat-card-footer">
@@ -40,7 +48,7 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        const baseUrl = import.meta.env.VITE_API_BASE || 'https://localhost:7272';
+        const baseUrl = import.meta.env.VITE_API_ADMIN || 'https://localhost:7272';
 
         const [nguoiDungRes, congTyRes] = await Promise.all([
           fetch(`${baseUrl}/api/NguoiDung`).then(r => r.ok ? r.json() : []).catch(() => []),

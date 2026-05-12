@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaEye, FaEdit, FaTrash, FaCheck, FaTimes } from 'react-icons/fa';
 import '../../styles/admin.css';
 
-const API_URL = import.meta.env.VITE_API_BASE ? `${import.meta.env.VITE_API_BASE}/api/ViecLam` : 'https://localhost:7272/api/ViecLam';
+const API_URL = import.meta.env.VITE_API_ADMIN ? `${import.meta.env.VITE_API_ADMIN}/api/ViecLam` : 'https://localhost:7272/api/ViecLam';
 
 const getAuthToken = () => {
   const savedUser = localStorage.getItem('authUser') || sessionStorage.getItem('authUser');
@@ -41,12 +41,18 @@ const ManageJobs = () => {
   const fetchJobs = async () => {
     try {
       setLoading(true);
+      console.log('🔍 Fetching jobs from:', API_URL);
+      console.log('🔑 Token:', getAuthToken() ? 'Có token' : 'Không có token');
+      
       const res = await fetch(API_URL, {
         headers: getHeaders()
       });
       
+      console.log('📡 Response status:', res.status);
+      
       // Nếu 401 và có token, nghĩa là token hết hạn
       if (res.status === 401 && getAuthToken()) {
+        console.error('❌ 401 Unauthorized - Token không hợp lệ');
         alert('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
         window.location.href = '/';
         return;
@@ -54,22 +60,35 @@ const ManageJobs = () => {
       
       // Nếu 401 nhưng không có token, thử gọi lại không cần auth
       if (res.status === 401 && !getAuthToken()) {
+        console.log('⚠️ 401 but no token, retrying without auth...');
         const res2 = await fetch(API_URL);
         if (res2.ok) {
           const data = await res2.json();
-          setJobs(Array.isArray(data) ? data : []);
+          console.log('✅ Data received (no auth):', data);
+          const jobsList = data.data || data || [];
+          setJobs(Array.isArray(jobsList) ? jobsList : []);
           setLoading(false);
           return;
         }
       }
       
-      if (!res.ok) throw new Error('Lỗi khi tải dữ liệu');
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('❌ API Error:', errorText);
+        throw new Error('Lỗi khi tải dữ liệu');
+      }
       
       const data = await res.json();
-      setJobs(Array.isArray(data) ? data : []);
+      console.log('✅ Data received:', data);
+      
+      // API trả về {success: true, data: [...]} nên cần lấy data.data
+      const jobsList = data.data || data || [];
+      console.log('✅ Jobs list:', jobsList);
+      
+      setJobs(Array.isArray(jobsList) ? jobsList : []);
     } catch (err) {
-      console.error(err);
-      alert('Không thể tải danh sách việc làm!');
+      console.error('❌ Fetch error:', err);
+      alert('Không thể tải danh sách việc làm! Chi tiết: ' + err.message);
     } finally {
       setLoading(false);
     }

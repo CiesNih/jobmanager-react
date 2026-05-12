@@ -125,11 +125,10 @@ export default function Header({ onOpenAuth }) {
                     </>
                   ) : (
                     <>
-                      <Link to="/profile" className="menu-item" onClick={() => setShowUserMenu(false)}>Quản lý hồ sơ</Link>
-                      <Link to="/applied-jobs" className="menu-item" onClick={() => setShowUserMenu(false)}>Việc làm đã ứng tuyển</Link>
-                      <Link to="/saved-jobs" className="menu-item" onClick={() => setShowUserMenu(false)}>Việc làm đã lưu</Link>
-                      <Link to="/change-password" className="menu-item" onClick={() => setShowUserMenu(false)}>Đổi mật khẩu</Link>
-                      <Link to="/settings" className="menu-item" onClick={() => setShowUserMenu(false)}>Cài đặt thông báo</Link>
+                      <Link to="/profile" className="menu-item" onClick={() => setShowUserMenu(false)}>👤 Quản lý hồ sơ</Link>
+                      <Link to="/applied-jobs" className="menu-item" onClick={() => setShowUserMenu(false)}>📝 Việc làm đã ứng tuyển</Link>
+                      <Link to="/saved-jobs" className="menu-item" onClick={() => setShowUserMenu(false)}>💾 Việc làm đã lưu</Link>
+                      <Link to="/notifications" className="menu-item" onClick={() => setShowUserMenu(false)}>🔔 Thông báo</Link>
                       <hr className="menu-divider" />
                       <button className="menu-item logout-item" onClick={handleLogout}>Đăng xuất</button>
                     </>
