@@ -9,33 +9,55 @@ import { CATEGORIES } from '../../utils/categoryData';
 export default function JobListPage() {
   const navigate = useNavigate();
   
-  // State tìm kiếm cơ bản
   const [keyword, setKeyword] = useState('');
   const [location, setLocation] = useState('');
-  
-  // MỚI: State cho các Dropdown Filters
-  const [filterCategory, setFilterCategory] = useState(''); // Ngành nghề
-  const [filterType, setFilterType] = useState('');         // Loại hình
-  const [filterSalary, setFilterSalary] = useState('');     // Mức lương
-  const [filterRole, setFilterRole] = useState('');         // Chức vụ
-  const [filterExp, setFilterExp] = useState('');           // Kinh nghiệm
-  const [filterEdu, setFilterEdu] = useState('');           // Học vấn
+  const [filterCategory, setFilterCategory] = useState('');
+  const [filterType, setFilterType] = useState('');
+  const [filterSalary, setFilterSalary] = useState('');
 
-  // State dữ liệu
   const [jobs, setJobs] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // State phân trang
   const [currentPage, setCurrentPage] = useState(1);
+  const [favorites, setFavorites] = useState([]);
   const itemsPerPage = 10;
+
+  const extractCategory = (tieuDe) => {
+    const title = (tieuDe || '').toLowerCase();
+    
+    if (title.includes('lập trình') || title.includes('developer') || title.includes('it') || title.includes('code')) return 'Công nghệ';
+    if (title.includes('bán hàng') || title.includes('sales')) return 'Bán hàng';
+    if (title.includes('kế toán') || title.includes('tài chính')) return 'Kế toán';
+    if (title.includes('marketing') || title.includes('tiếp thị')) return 'Marketing';
+    if (title.includes('nhân sự') || title.includes('hr')) return 'Nhân sự';
+    if (title.includes('thiết kế') || title.includes('designer')) return 'Thiết kế';
+    if (title.includes('quản lý') || title.includes('manager')) return 'Quản lý';
+    if (title.includes('tư vấn')) return 'Tư vấn';
+    
+    return 'Khác';
+  };
+
+  const getUniqueCategories = () => {
+    const categories = new Set(jobs.map(j => extractCategory(j.tieuDe))); // ← Bây giờ jobs accessible
+    return Array.from(categories).sort();
+  };
 
   useEffect(() => { fetchJobs(); }, []);
 
-
   useEffect(() => {
     applyFilters();
-  }, [keyword, location, jobs, filterCategory, filterType, filterSalary, filterRole, filterExp, filterEdu]);
+  }, [keyword, location, jobs, filterCategory, filterType, filterSalary]); 
+
+  useEffect(() => {
+    loadFavorites();
+  }, []);
+
+  const loadFavorites = () => {
+    const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+    const favoriteIds = savedJobs.map(job => job.maViecLam);
+    setFavorites(favoriteIds);
+  }; 
 
   const fetchJobs = async () => {
     try {
@@ -70,49 +92,25 @@ export default function JobListPage() {
       out = out.filter(j => (j.diaDiem || '').toLowerCase().includes(l));
     }
 
-  
+    // 3. Lọc theo Ngành nghề (NEW)
     if (filterCategory) {
-      out = out.filter(j => (j.nganhNghe || '').toLowerCase() === filterCategory.toLowerCase());
+      out = out.filter(j => extractCategory(j.tieuDe) === filterCategory);
     }
 
-    // 4. Lọc theo Loại hình (Type)
+    // 4. Lọc theo Loại hình
     if (filterType) {
-      out = out.filter(j => (j.loaiHinh || '').toLowerCase() === filterType.toLowerCase());
+      out = out.filter(j => (j.loaiHinhCongViec || '').toLowerCase() === filterType.toLowerCase());
     }
 
-    // 5. Lọc theo Mức lương (Logic khoảng giá)
+    // 5. Lọc theo Mức lương
     if (filterSalary) {
       out = out.filter(j => {
-        // Nếu chọn thỏa thuận
-        if (filterSalary === 'thoathuan') return !j.luongToiThieu && !j.luongToiDa;
-        
         const min = j.luongToiThieu || 0;
         if (filterSalary === 'duoi10') return min > 0 && min < 10000000;
         if (filterSalary === '10-20') return min >= 10000000 && min <= 20000000;
         if (filterSalary === 'tren20') return min > 20000000;
         return true;
       });
-    }
-
-    // 6. Lọc theo Chức vụ / Cấp bậc
-    if (filterRole) {
-      out = out.filter(j => (j.capBac || '').toLowerCase() === filterRole.toLowerCase());
-    }
-
-    // 7. Lọc theo Kinh nghiệm
-    if (filterExp) {
-      out = out.filter(j => {
-        const expStr = (j.kinhNghiem || '').toLowerCase();
-        if (filterExp === '0') return expStr.includes('không') || expStr.includes('chưa');
-        if (filterExp === '1-3') return expStr.includes('1') || expStr.includes('2') || expStr.includes('3');
-        if (filterExp === '3-5') return expStr.includes('3') || expStr.includes('4') || expStr.includes('5');
-        return true;
-      });
-    }
-
-    // 8. Lọc theo Học vấn
-    if (filterEdu) {
-      out = out.filter(j => (j.hocVan || '').toLowerCase().includes(filterEdu.toLowerCase()));
     }
 
     setFiltered(out);
@@ -122,6 +120,38 @@ export default function JobListPage() {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     applyFilters();
+  };
+
+  const toggleFavorite = (e, job) => {
+    e.stopPropagation(); // Prevent card click
+    
+    // Check if user is logged in
+    const savedUser = localStorage.getItem('authUser') || sessionStorage.getItem('authUser');
+    if (!savedUser) {
+      alert('Vui lòng đăng nhập để lưu việc làm!');
+      return;
+    }
+
+    const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
+    const isSaved = savedJobs.some(j => j.maViecLam === job.maViecLam);
+    
+    if (isSaved) {
+      // Remove from saved
+      const updatedJobs = savedJobs.filter(j => j.maViecLam !== job.maViecLam);
+      localStorage.setItem('savedJobs', JSON.stringify(updatedJobs));
+      setFavorites(prev => prev.filter(id => id !== job.maViecLam));
+      alert('Đã bỏ lưu việc làm này!');
+    } else {
+      // Add to saved
+      const savedJob = {
+        ...job,
+        savedAt: new Date().toISOString()
+      };
+      savedJobs.push(savedJob);
+      localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
+      setFavorites(prev => [...prev, job.maViecLam]);
+      alert('✅ Đã lưu việc làm!');
+    }
   };
 
   const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
@@ -148,62 +178,37 @@ export default function JobListPage() {
         </form>
 
         <div className="joblist-filters">
-  
-        {/* LỌC NGÀNH NGHỀ */}
-        <select className="filter-select-blue" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
-          <option value="" hidden>Ngành nghề</option>
-          <option value="">Tất cả ngành nghề</option>
-          {CATEGORIES.INDUSTRIES.map(item => (
-            <option key={item.id} value={item.id}>{item.label}</option>
-          ))}
-        </select>
+          {/* LỌC NGÀNH NGHỀ (NEW) */}
+          <select 
+            className="filter-select-blue" 
+            value={filterCategory} 
+            onChange={(e) => setFilterCategory(e.target.value)}
+          >
+            <option value="" hidden>Ngành nghề</option>
+            <option value="">Tất cả ngành nghề</option>
+            {getUniqueCategories().map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
 
-        {/* LỌC LOẠI HÌNH */}
-        <select className="filter-select-blue" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-          <option value="" hidden>Loại hình</option>
-          <option value="">Tất cả loại hình</option>
-          {CATEGORIES.JOB_TYPES.map(item => (
-            <option key={item.id} value={item.id}>{item.label}</option>
-          ))}
-        </select>
+          {/* LỌC LOẠI HÌNH */}
+          <select className="filter-select-blue" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+            <option value="" hidden>Loại hình</option>
+            <option value="">Tất cả loại hình</option>
+            {CATEGORIES.JOB_TYPES.map(item => (
+              <option key={item.id} value={item.id}>{item.label}</option>
+            ))}
+          </select>
 
-        {/* LỌC MỨC LƯƠNG */}
-        <select className="filter-select-blue" value={filterSalary} onChange={(e) => setFilterSalary(e.target.value)}>
-          <option value="" hidden>Mức lương</option>
-          <option value="">Tất cả mức lương</option>
-          {CATEGORIES.SALARIES.map(item => (
-            <option key={item.id} value={item.id}>{item.label}</option>
-          ))}
-        </select>
-
-        {/* LỌC CHỨC VỤ */}
-        <select className="filter-select-blue" value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
-          <option value="" hidden>Chức vụ</option>
-          <option value="">Tất cả chức vụ</option>
-          {CATEGORIES.ROLES.map(item => (
-            <option key={item.id} value={item.id}>{item.label}</option>
-          ))}
-        </select>
-
-        {/* LỌC KINH NGHIỆM */}
-        <select className="filter-select-blue" value={filterExp} onChange={(e) => setFilterExp(e.target.value)}>
-          <option value="" hidden>Kinh nghiệm</option>
-          <option value="">Mọi kinh nghiệm</option>
-          {CATEGORIES.EXPERIENCES.map(item => (
-            <option key={item.id} value={item.id}>{item.label}</option>
-          ))}
-        </select>
-
-        {/* LỌC HỌC VẤN */}
-        <select className="filter-select-blue" value={filterEdu} onChange={(e) => setFilterEdu(e.target.value)}>
-          <option value="" hidden>Học vấn</option>
-          <option value="">Mọi trình độ</option>
-          {CATEGORIES.EDUCATIONS.map(item => (
-            <option key={item.id} value={item.id}>{item.label}</option>
-          ))}
-        </select>
-
-      </div>
+          {/* LỌC MỨC LƯƠNG */}
+          <select className="filter-select-blue" value={filterSalary} onChange={(e) => setFilterSalary(e.target.value)}>
+            <option value="" hidden>Mức lương</option>
+            <option value="">Tất cả mức lương</option>
+            {CATEGORIES.SALARIES.map(item => (
+              <option key={item.id} value={item.id}>{item.label}</option>
+            ))}
+          </select>
+        </div>
       </section>
 
       <section className="results-section">
@@ -255,14 +260,11 @@ export default function JobListPage() {
 
                     <div className="card-right">
                       <button 
-                        className="btn-favorite-job"
-                        onClick={(e) => {
-                          e.stopPropagation(); // Prevent card click
-                          // TODO: Add favorite logic here
-                          console.log('Favorite clicked:', job.maViecLam);
-                        }}
+                        className={`btn-favorite-job ${favorites.includes(job.maViecLam) ? 'active' : ''}`}
+                        onClick={(e) => toggleFavorite(e, job)}
+                        title={favorites.includes(job.maViecLam) ? 'Bỏ lưu' : 'Lưu việc làm'}
                       >
-                        ♡
+                        {favorites.includes(job.maViecLam) ? '♥' : '♡'}
                       </button>
                     </div>
                   </div>
@@ -289,3 +291,4 @@ export default function JobListPage() {
     </div>
   );
 }
+

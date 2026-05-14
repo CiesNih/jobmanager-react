@@ -14,10 +14,10 @@ function CVPreviewModal({ cv, onClose }) {
         <div className="modal-header">
           <h2>Xem trước CV</h2>
           <span className={`template-badge-large ${cv.template}`}>
-            {cv.template === 'modern' && '📄 Mẫu Hiện đại'}
-            {cv.template === 'classic' && '📋 Mẫu Cổ điển'}
-            {cv.template === 'creative' && '🎨 Mẫu Sáng tạo'}
-            {cv.template === 'professional' && '💼 Mẫu Chuyên nghiệp'}
+            {cv.template === 'modern' && ' Mẫu Hiện đại'}
+            {cv.template === 'classic' && ' Mẫu Cổ điển'}
+            {cv.template === 'creative' && ' Mẫu Sáng tạo'}
+            {cv.template === 'professional' && ' Mẫu Chuyên nghiệp'}
           </span>
         </div>
 
@@ -179,6 +179,7 @@ export default function Profile() {
     setUser(JSON.parse(savedUser));
 
     // Load saved CVs
+    // eslint-disable-next-line react-hooks/immutability
     loadSavedCVs();
   }, [navigate]);
 

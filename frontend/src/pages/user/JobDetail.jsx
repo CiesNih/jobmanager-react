@@ -14,14 +14,19 @@ export default function JobDetail() {
   useEffect(() => {
     const fetchAndFilterJob = async () => {
       try {
-        const res = await axios.get(`https://localhost:7122/api/ViecLam/`);
-        const foundJob = res.data.find(item => item.maViecLam === id);
-        if (foundJob) {
-          setJob(foundJob);
-          checkIfApplied(foundJob.maViecLam);
-          checkIfSaved(foundJob.maViecLam);
+        const baseUrl = import.meta.env.VITE_API_BASE || 'http://localhost:7272';
+        
+        // ✅ Gọi API
+        const res = await axios.get(`${baseUrl}/api/ViecLam/${id}`);
+        
+        // ✅ Lấy res.data.data vì API wrap data
+        if (res.data && res.data.data) {
+          const jobData = res.data.data;
+          setJob(jobData);
+          checkIfApplied(jobData.maViecLam);
+          checkIfSaved(jobData.maViecLam);
         } else {
-          console.error("Không tìm thấy công việc với ID này");
+          console.error("Không tìm thấy công việc");
         }
       } catch (err) {
         console.error("Lỗi khi kết nối API:", err);

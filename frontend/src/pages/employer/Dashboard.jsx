@@ -42,10 +42,10 @@ const EmployerDashboard = () => {
       </div>
 
       <div className="dashboard-grid">
-        <div className="stat-card bg-orange">
-          <div className="inner">
-            <h3>{stats.totalJobs}</h3>
-            <p>Tổng tin tuyển dụng</p>
+        <div className="stat-card bg-orange" style={{ background: '#f39c12' }}>
+          <div className="inner" style={{ color: '#fff' }}>
+            <h3 style={{ color: '#fff' }}>{stats.totalJobs}</h3>
+            <p style={{ color: '#fff' }}>Tổng tin tuyển dụng</p>
           </div>
           <div className="icon">💼</div>
           <Link to="/employer/jobs" className="stat-card-footer">
@@ -53,10 +53,10 @@ const EmployerDashboard = () => {
           </Link>
         </div>
 
-        <div className="stat-card bg-green">
-          <div className="inner">
-            <h3>{stats.activeJobs}</h3>
-            <p>Tin đang hoạt động</p>
+        <div className="stat-card bg-green" style={{ background: '#00a65a' }}>
+          <div className="inner" style={{ color: '#fff' }}>
+            <h3 style={{ color: '#fff' }}>{stats.activeJobs}</h3>
+            <p style={{ color: '#fff' }}>Tin đang hoạt động</p>
           </div>
           <div className="icon">✅</div>
           <Link to="/employer/jobs" className="stat-card-footer">
@@ -64,10 +64,10 @@ const EmployerDashboard = () => {
           </Link>
         </div>
 
-        <div className="stat-card bg-blue">
-          <div className="inner">
-            <h3>{stats.applications}</h3>
-            <p>Đơn ứng tuyển</p>
+        <div className="stat-card bg-blue" style={{ background: '#0078a3' }}>
+          <div className="inner" style={{ color: '#fff' }}>
+            <h3 style={{ color: '#fff' }}>{stats.applications}</h3>
+            <p style={{ color: '#fff' }}>Đơn ứng tuyển</p>
           </div>
           <div className="icon">📄</div>
           <Link to="/employer/applications" className="stat-card-footer">
@@ -75,10 +75,10 @@ const EmployerDashboard = () => {
           </Link>
         </div>
 
-        <div className="stat-card bg-red">
-          <div className="inner">
-            <h3>{stats.interviews}</h3>
-            <p>Lịch phỏng vấn</p>
+        <div className="stat-card bg-red" style={{ background: '#dd4b39' }}>
+          <div className="inner" style={{ color: '#fff' }}>
+            <h3 style={{ color: '#fff' }}>{stats.interviews}</h3>
+            <p style={{ color: '#fff' }}>Lịch phỏng vấn</p>
           </div>
           <div className="icon">📅</div>
           <Link to="/employer/interviews" className="stat-card-footer">
